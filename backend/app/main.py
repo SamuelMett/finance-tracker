@@ -9,7 +9,7 @@ from app.api.routes import accounts, auth, categories, dashboard, debts, recurri
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="Finance Tracker API")
+app = FastAPI(title="Runway API")
 
 raw = os.getenv("CORS_ORIGINS", "")
 origins = [o.strip() for o in raw.split(",") if o.strip()]

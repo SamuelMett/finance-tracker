@@ -1,5 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
+import Features from "./pages/Features";
+import Security from "./pages/Security";
 import About from "./pages/About";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -17,6 +19,8 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/features" element={<Features />} />
+      <Route path="/security" element={<Security />} />
       <Route path="/about" element={<About />} />
 
       <Route path="/login" element={<Login />} />

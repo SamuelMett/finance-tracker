@@ -58,7 +58,7 @@ export default function Login() {
       <div className="mx-auto flex min-h-screen w-full max-w-md items-center">
         <div className="w-full rounded-2xl border border-slate-800 bg-slate-900/40 p-6 shadow">
           <div className="mb-5">
-            <div className="text-2xl font-semibold text-emerald-400">Finance Tracker</div>
+            <div className="text-2xl font-semibold text-emerald-400">Runway</div>
             <div className="mt-1 text-sm text-slate-400">Sign in to manage your money.</div>
           </div>
 
