@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { api, setAuthToken } from "../api/client";
 
 function isValidEmail(email) {
@@ -10,9 +10,10 @@ export default function Login() {
   const nav = useNavigate();
   const [email, setEmail] = useState(localStorage.getItem("email") || "");
   const [password, setPassword] = useState("");
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  if (localStorage.getItem("token")) return <Navigate to="/dashboard" replace />;
 
   async function onSubmit(e) {
     e.preventDefault();
