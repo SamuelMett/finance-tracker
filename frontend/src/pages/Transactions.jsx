@@ -98,22 +98,22 @@ export default function Transactions() {
       <div className="space-y-6">
         <div>
           <h1 className="text-2xl font-semibold">Transactions</h1>
-          <p className="mt-1 text-sm text-zinc-400">Log income and expenses against your accounts.</p>
+          <p className="mt-1 text-sm text-slate-400">Log income and expenses against your accounts.</p>
         </div>
 
         {error && (
-          <div className="rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-200">{error}</div>
+          <div className="rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-sm text-rose-200">{error}</div>
         )}
 
         {accounts.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-zinc-800 p-8 text-center text-sm text-zinc-500">
+          <div className="rounded-2xl border border-dashed border-slate-800 p-8 text-center text-sm text-slate-500">
             Create an account first before logging transactions.
           </div>
         ) : (
-          <form onSubmit={onSubmit} className="rounded-2xl border border-zinc-800 bg-zinc-900/30 p-4">
+          <form onSubmit={onSubmit} className="rounded-2xl border border-slate-800 bg-slate-900/30 p-4">
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 lg:grid-cols-6">
               <select
-                className="rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm outline-none focus:border-indigo-500"
+                className="rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm outline-none focus:border-emerald-500"
                 value={kind}
                 onChange={(e) => {
                   setKind(e.target.value);
@@ -125,7 +125,7 @@ export default function Transactions() {
               </select>
 
               <input
-                className="rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm outline-none focus:border-indigo-500"
+                className="rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm outline-none focus:border-emerald-500"
                 placeholder="Amount"
                 type="number"
                 step="0.01"
@@ -136,7 +136,7 @@ export default function Transactions() {
               />
 
               <select
-                className="rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm outline-none focus:border-indigo-500"
+                className="rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm outline-none focus:border-emerald-500"
                 value={accountId}
                 onChange={(e) => setAccountId(e.target.value)}
                 required
@@ -149,7 +149,7 @@ export default function Transactions() {
               </select>
 
               <select
-                className="rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm outline-none focus:border-indigo-500"
+                className="rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm outline-none focus:border-emerald-500"
                 value={categoryId}
                 onChange={(e) => setCategoryId(e.target.value)}
               >
@@ -162,7 +162,7 @@ export default function Transactions() {
               </select>
 
               <input
-                className="rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm outline-none focus:border-indigo-500"
+                className="rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm outline-none focus:border-emerald-500"
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
@@ -170,13 +170,13 @@ export default function Transactions() {
               />
 
               <input
-                className="rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm outline-none focus:border-indigo-500"
+                className="rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm outline-none focus:border-emerald-500"
                 placeholder="Description (optional)"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
             </div>
-            <button className="mt-3 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium hover:bg-indigo-500">
+            <button className="mt-3 rounded-lg bg-emerald-500 px-4 py-2 text-sm font-medium hover:bg-emerald-400">
               Add transaction
             </button>
           </form>
@@ -184,7 +184,7 @@ export default function Transactions() {
 
         <div className="flex flex-wrap gap-2">
           <select
-            className="rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-1.5 text-sm outline-none focus:border-indigo-500"
+            className="rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 text-sm outline-none focus:border-emerald-500"
             value={filterKind}
             onChange={(e) => setFilterKind(e.target.value)}
           >
@@ -193,7 +193,7 @@ export default function Transactions() {
             <option value="expense">Expense</option>
           </select>
           <select
-            className="rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-1.5 text-sm outline-none focus:border-indigo-500"
+            className="rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 text-sm outline-none focus:border-emerald-500"
             value={filterAccount}
             onChange={(e) => setFilterAccount(e.target.value)}
           >
@@ -205,7 +205,7 @@ export default function Transactions() {
             ))}
           </select>
           <select
-            className="rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-1.5 text-sm outline-none focus:border-indigo-500"
+            className="rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 text-sm outline-none focus:border-emerald-500"
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value)}
           >
@@ -219,15 +219,15 @@ export default function Transactions() {
         </div>
 
         {loading ? (
-          <div className="text-sm text-zinc-500">Loading...</div>
+          <div className="text-sm text-slate-500">Loading...</div>
         ) : visible.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-zinc-800 p-8 text-center text-sm text-zinc-500">
+          <div className="rounded-2xl border border-dashed border-slate-800 p-8 text-center text-sm text-slate-500">
             No transactions match.
           </div>
         ) : (
-          <div className="overflow-hidden rounded-2xl border border-zinc-800">
+          <div className="overflow-hidden rounded-2xl border border-slate-800">
             <table className="w-full text-sm">
-              <thead className="bg-zinc-900/60 text-left text-xs uppercase tracking-wide text-zinc-500">
+              <thead className="bg-slate-900/60 text-left text-xs uppercase tracking-wide text-slate-500">
                 <tr>
                   <th className="px-4 py-3">Date</th>
                   <th className="px-4 py-3">Description</th>
@@ -237,14 +237,14 @@ export default function Transactions() {
                   <th className="px-4 py-3"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-800">
+              <tbody className="divide-y divide-slate-800">
                 {visible.map((t) => {
                   const cat = category(t.category_id);
                   return (
-                    <tr key={t.id} className="hover:bg-zinc-900/40">
-                      <td className="px-4 py-3 text-zinc-400">{formatDate(t.date)}</td>
+                    <tr key={t.id} className="hover:bg-slate-900/40">
+                      <td className="px-4 py-3 text-slate-400">{formatDate(t.date)}</td>
                       <td className="px-4 py-3">{t.description || "—"}</td>
-                      <td className="px-4 py-3 text-zinc-400">{accountName(t.account_id)}</td>
+                      <td className="px-4 py-3 text-slate-400">{accountName(t.account_id)}</td>
                       <td className="px-4 py-3">
                         {cat ? (
                           <span className="inline-flex items-center gap-1.5">
@@ -252,19 +252,19 @@ export default function Transactions() {
                             {cat.name}
                           </span>
                         ) : (
-                          <span className="text-zinc-500">—</span>
+                          <span className="text-slate-500">—</span>
                         )}
                       </td>
                       <td
                         className={`px-4 py-3 text-right font-medium ${
-                          t.kind === "income" ? "text-emerald-400" : "text-red-400"
+                          t.kind === "income" ? "text-emerald-400" : "text-rose-400"
                         }`}
                       >
                         {t.kind === "income" ? "+" : "-"}
                         {formatCurrency(t.amount)}
                       </td>
                       <td className="px-4 py-3 text-right">
-                        <button onClick={() => remove(t.id)} className="text-xs text-zinc-500 hover:text-red-400">
+                        <button onClick={() => remove(t.id)} className="text-xs text-slate-500 hover:text-rose-400">
                           Delete
                         </button>
                       </td>

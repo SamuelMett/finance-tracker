@@ -73,18 +73,18 @@ export default function Settings() {
   return (
     <Layout>
       <div className="mx-auto max-w-2xl space-y-6">
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-900/30 p-6">
+        <div className="rounded-2xl border border-slate-800 bg-slate-900/30 p-6">
           <h1 className="text-2xl font-semibold">Settings</h1>
-          <p className="mt-1 text-sm text-zinc-400">
-            Signed in as <span className="font-medium text-zinc-200">{me?.email}</span>
+          <p className="mt-1 text-sm text-slate-400">
+            Signed in as <span className="font-medium text-slate-200">{me?.email}</span>
           </p>
         </div>
 
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-900/30 p-6">
+        <div className="rounded-2xl border border-slate-800 bg-slate-900/30 p-6">
           <div className="flex items-center justify-between gap-4">
             <div>
               <div className="font-semibold">Two-factor authentication</div>
-              <div className="text-sm text-zinc-400">
+              <div className="text-sm text-slate-400">
                 {me?.twofa_enabled
                   ? "Enabled — a code from your authenticator app is required at login."
                   : "Disabled — add an extra layer of security to your account."}
@@ -95,7 +95,7 @@ export default function Settings() {
               <button
                 onClick={disable2fa}
                 disabled={loading}
-                className="shrink-0 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-200 hover:bg-red-500/20 disabled:opacity-60"
+                className="shrink-0 rounded-lg border border-rose-500/30 bg-rose-500/10 px-4 py-2 text-sm font-medium text-rose-200 hover:bg-rose-500/20 disabled:opacity-60"
               >
                 Disable
               </button>
@@ -104,7 +104,7 @@ export default function Settings() {
                 <button
                   onClick={startSetup}
                   disabled={loading}
-                  className="shrink-0 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium hover:bg-indigo-500 disabled:opacity-60"
+                  className="shrink-0 rounded-lg bg-emerald-500 px-4 py-2 text-sm font-medium hover:bg-emerald-400 disabled:opacity-60"
                 >
                   Enable
                 </button>
@@ -113,7 +113,7 @@ export default function Settings() {
           </div>
 
           {error && (
-            <div className="mt-4 rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-200">
+            <div className="mt-4 rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-sm text-rose-200">
               {error}
             </div>
           )}
@@ -124,8 +124,8 @@ export default function Settings() {
           )}
 
           {setup && (
-            <div className="mt-5 space-y-4 border-t border-zinc-800 pt-5">
-              <p className="text-sm text-zinc-400">
+            <div className="mt-5 space-y-4 border-t border-slate-800 pt-5">
+              <p className="text-sm text-slate-400">
                 Scan this QR code with your authenticator app (Google Authenticator, Authy, 1Password, etc.),
                 then enter the 6-digit code it generates.
               </p>
@@ -140,11 +140,11 @@ export default function Settings() {
                   onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
                   inputMode="numeric"
                   placeholder="123456"
-                  className="flex-1 rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-center tracking-[0.4em] outline-none focus:border-indigo-500"
+                  className="flex-1 rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-center tracking-[0.4em] outline-none focus:border-emerald-500"
                 />
                 <button
                   disabled={loading || code.length !== 6}
-                  className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium hover:bg-indigo-500 disabled:opacity-60"
+                  className="rounded-lg bg-emerald-500 px-4 py-2 text-sm font-medium hover:bg-emerald-400 disabled:opacity-60"
                 >
                   Confirm
                 </button>
