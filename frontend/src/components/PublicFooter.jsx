@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
-import { Landmark } from "lucide-react";
+import RunwayMark from "./RunwayMark";
 
 export default function PublicFooter() {
   return (
     <footer className="border-t border-slate-800/80">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 py-8 text-sm text-slate-500 sm:flex-row sm:px-6">
         <div className="flex items-center gap-2">
-          <Landmark size={16} className="text-slate-600" />
+          <RunwayMark size={16} />
           <span>Runway &copy; {new Date().getFullYear()}</span>
         </div>
         <div className="flex flex-wrap items-center justify-center gap-5">
