@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import { api } from "../api/client";
+import { EmptyState, inputClass, selectClass } from "../components/ui";
 
-const COLORS = ["#6366f1", "#f97316", "#22c55e", "#ef4444", "#06b6d4", "#eab308", "#ec4899", "#8b5cf6"];
+const COLORS = ["#8a5a20", "#3c5e3f", "#8a3324", "#2c4a6e", "#6b5730", "#5c4a6e", "#4a5a3c", "#7a3a4a"];
 
 export default function Categories() {
   const [categories, setCategories] = useState([]);
@@ -56,73 +57,60 @@ export default function Categories() {
 
   return (
     <Layout>
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-semibold">Categories</h1>
-          <p className="mt-1 text-sm text-slate-400">Group your income and expenses for reporting.</p>
+      <div className="space-y-8">
+        <div className="border-b border-ink pb-3">
+          <h1 className="font-serif text-2xl">Categories</h1>
+          <p className="mt-1 font-mono text-xs text-sub">Group your income and expenses for reporting.</p>
         </div>
 
-        {error && (
-          <div className="rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-sm text-rose-200">{error}</div>
-        )}
+        {error && <div className="border border-neg/40 px-3 py-2 font-mono text-xs text-neg">{error}</div>}
 
-        <form onSubmit={onSubmit} className="rounded-2xl border border-slate-800 bg-slate-900/30 p-4">
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
+        <form onSubmit={onSubmit} className="border border-rule p-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
             <input
-              className="rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm outline-none focus:border-emerald-500 sm:col-span-2"
+              className={`${inputClass} sm:col-span-2`}
               placeholder="Category name (e.g. Groceries)"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
             />
-            <select
-              className="rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm outline-none focus:border-emerald-500"
-              value={kind}
-              onChange={(e) => setKind(e.target.value)}
-            >
+            <select className={selectClass} value={kind} onChange={(e) => setKind(e.target.value)}>
               <option value="expense">Expense</option>
               <option value="income">Income</option>
             </select>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 py-2">
               {COLORS.map((c) => (
                 <button
                   type="button"
                   key={c}
                   onClick={() => setColor(c)}
-                  className={`h-7 w-7 rounded-full border-2 ${color === c ? "border-white" : "border-transparent"}`}
+                  className={`h-5 w-5 border ${color === c ? "border-ink" : "border-transparent"}`}
                   style={{ backgroundColor: c }}
                   aria-label={c}
                 />
               ))}
             </div>
           </div>
-          <button className="mt-3 rounded-lg bg-emerald-500 px-4 py-2 text-sm font-medium hover:bg-emerald-400">
+          <button className="mt-4 border border-ink bg-ink px-4 py-2 font-mono text-xs uppercase tracking-[0.08em] text-paper transition hover:bg-transparent hover:text-ink">
             Add category
           </button>
         </form>
 
         {loading ? (
-          <div className="text-sm text-slate-500">Loading...</div>
+          <div className="font-mono text-xs text-sub">Loading...</div>
         ) : categories.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-slate-800 p-8 text-center text-sm text-slate-500">
-            No categories yet. Add one above.
-          </div>
+          <EmptyState title="No categories yet" subtitle="Add one above." />
         ) : (
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div>
             {categories.map((c) => (
-              <div
-                key={c.id}
-                className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/30 px-4 py-3"
-              >
+              <div key={c.id} className="flex items-center justify-between border-b border-rule py-2.5 last:border-b-0">
                 <div className="flex items-center gap-3">
-                  <span className="h-3 w-3 rounded-full" style={{ backgroundColor: c.color }} />
-                  <div>
-                    <div className="font-medium">{c.name}</div>
-                    <div className="text-xs capitalize text-slate-500">{c.kind}</div>
-                  </div>
+                  <span className="h-2.5 w-2.5 shrink-0" style={{ backgroundColor: c.color }} />
+                  <span className="font-serif text-[15px]">{c.name}</span>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.06em] text-sub">{c.kind}</span>
                 </div>
-                <button onClick={() => remove(c.id)} className="text-xs text-slate-500 hover:text-rose-400">
-                  Delete
+                <button onClick={() => remove(c.id)} className="font-mono text-[10px] text-sub hover:text-neg">
+                  del
                 </button>
               </div>
             ))}

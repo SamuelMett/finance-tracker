@@ -1,31 +1,31 @@
 import { Link } from "react-router-dom";
-import { Landmark } from "lucide-react";
+import RunwayMark from "./RunwayMark";
 
 export default function PublicFooter() {
   return (
-    <footer className="border-t border-slate-800/80">
-      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 py-8 text-sm text-slate-500 sm:flex-row sm:px-6">
+    <footer className="border-t border-rule">
+      <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 px-4 py-8 font-mono text-[11px] text-sub sm:flex-row sm:px-6">
         <div className="flex items-center gap-2">
-          <Landmark size={16} className="text-slate-600" />
+          <RunwayMark size={16} />
           <span>Runway &copy; {new Date().getFullYear()}</span>
         </div>
-        <div className="flex flex-wrap items-center justify-center gap-5">
-          <Link to="/" className="hover:text-slate-300">
+        <div className="flex flex-wrap items-center justify-center gap-5 uppercase tracking-[0.06em]">
+          <Link to="/" className="hover:text-ink">
             Home
           </Link>
-          <Link to="/features" className="hover:text-slate-300">
+          <Link to="/features" className="hover:text-ink">
             Features
           </Link>
-          <Link to="/security" className="hover:text-slate-300">
+          <Link to="/security" className="hover:text-ink">
             Security
           </Link>
-          <Link to="/about" className="hover:text-slate-300">
+          <Link to="/about" className="hover:text-ink">
             About
           </Link>
-          <Link to="/login" className="hover:text-slate-300">
+          <Link to="/login" className="hover:text-ink">
             Log in
           </Link>
-          <Link to="/register" className="hover:text-slate-300">
+          <Link to="/register" className="hover:text-ink">
             Register
           </Link>
         </div>

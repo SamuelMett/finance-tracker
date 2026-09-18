@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import { api } from "../api/client";
+import { Button } from "../components/ui";
 
 export default function Settings() {
   const [me, setMe] = useState(null);
@@ -72,19 +73,19 @@ export default function Settings() {
 
   return (
     <Layout>
-      <div className="mx-auto max-w-2xl space-y-6">
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/30 p-6">
-          <h1 className="text-2xl font-semibold">Settings</h1>
-          <p className="mt-1 text-sm text-slate-400">
-            Signed in as <span className="font-medium text-slate-200">{me?.email}</span>
+      <div className="mx-auto max-w-xl space-y-8">
+        <div className="border-b border-ink pb-3">
+          <h1 className="font-serif text-2xl">Settings</h1>
+          <p className="mt-1 font-mono text-xs text-sub">
+            Signed in as <span className="text-ink">{me?.email}</span>
           </p>
         </div>
 
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/30 p-6">
-          <div className="flex items-center justify-between gap-4">
+        <div>
+          <div className="flex items-center justify-between gap-4 border-b border-rule pb-4">
             <div>
-              <div className="font-semibold">Two-factor authentication</div>
-              <div className="text-sm text-slate-400">
+              <div className="font-serif text-lg">Two-factor authentication</div>
+              <div className="mt-1 font-mono text-xs text-sub">
                 {me?.twofa_enabled
                   ? "Enabled: a code from your authenticator app is required at login."
                   : "Disabled: turn it on to add an extra layer of security to your account."}
@@ -92,62 +93,41 @@ export default function Settings() {
             </div>
 
             {me?.twofa_enabled ? (
-              <button
-                onClick={disable2fa}
-                disabled={loading}
-                className="shrink-0 rounded-lg border border-rose-500/30 bg-rose-500/10 px-4 py-2 text-sm font-medium text-rose-200 hover:bg-rose-500/20 disabled:opacity-60"
-              >
+              <Button variant="danger" onClick={disable2fa} disabled={loading}>
                 Disable
-              </button>
+              </Button>
             ) : (
               !setup && (
-                <button
-                  onClick={startSetup}
-                  disabled={loading}
-                  className="shrink-0 rounded-lg bg-emerald-500 px-4 py-2 text-sm font-medium hover:bg-emerald-400 disabled:opacity-60"
-                >
+                <Button onClick={startSetup} disabled={loading}>
                   Enable
-                </button>
+                </Button>
               )
             )}
           </div>
 
-          {error && (
-            <div className="mt-4 rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-sm text-rose-200">
-              {error}
-            </div>
-          )}
-          {message && (
-            <div className="mt-4 rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-3 text-sm text-emerald-200">
-              {message}
-            </div>
-          )}
+          {error && <div className="mt-4 border border-neg/40 px-3 py-2 font-mono text-xs text-neg">{error}</div>}
+          {message && <div className="mt-4 border border-pos/40 px-3 py-2 font-mono text-xs text-pos">{message}</div>}
 
           {setup && (
-            <div className="mt-5 space-y-4 border-t border-slate-800 pt-5">
-              <p className="text-sm text-slate-400">
-                Scan this QR code with your authenticator app (Google Authenticator, Authy, 1Password, etc.),
-                then enter the 6-digit code it generates.
+            <div className="mt-5 space-y-4 pt-1">
+              <p className="font-mono text-xs text-sub">
+                Scan this QR code with your authenticator app (Google Authenticator, Authy, 1Password, etc.), then
+                enter the 6-digit code it generates.
               </p>
               <img
                 src={`data:image/png;base64,${setup.qr_png_base64}`}
                 alt="2FA QR code"
-                className="mx-auto h-48 w-48 rounded-lg bg-white p-2"
+                className="mx-auto h-44 w-44 border border-rule bg-white p-2"
               />
-              <form onSubmit={confirmSetup} className="flex gap-2">
+              <form onSubmit={confirmSetup} className="flex gap-3">
                 <input
                   value={code}
                   onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
                   inputMode="numeric"
-                  placeholder="123456"
-                  className="flex-1 rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-center tracking-[0.4em] outline-none focus:border-emerald-500"
+                  placeholder="000000"
+                  className="flex-1 border-0 border-b border-rule bg-transparent py-2 text-center font-mono text-lg tracking-[0.4em] text-ink outline-none focus:border-ink"
                 />
-                <button
-                  disabled={loading || code.length !== 6}
-                  className="rounded-lg bg-emerald-500 px-4 py-2 text-sm font-medium hover:bg-emerald-400 disabled:opacity-60"
-                >
-                  Confirm
-                </button>
+                <Button disabled={loading || code.length !== 6}>Confirm</Button>
               </form>
             </div>
           )}

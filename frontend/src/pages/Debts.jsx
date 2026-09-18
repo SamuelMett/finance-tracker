@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { CreditCard, Plus, Trash2, TrendingDown } from "lucide-react";
 import Layout from "../components/Layout";
 import { api } from "../api/client";
 import { formatCurrency } from "../lib/format";
-import { Card, StatCard, Badge, EmptyState, Button, inputClass } from "../components/ui";
+import { StatRow, StatCard, EmptyState, Button, LedgerRow, inputClass, selectClass } from "../components/ui";
 
 const TYPES = [
   { value: "credit_card", label: "Credit card" },
@@ -108,27 +107,25 @@ export default function Debts() {
 
   return (
     <Layout>
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-semibold">Debts</h1>
-          <p className="mt-1 text-sm text-slate-400">Track balances and plan your payoff strategy.</p>
+      <div className="space-y-8">
+        <div className="border-b border-ink pb-3">
+          <h1 className="font-serif text-2xl">Debts</h1>
+          <p className="mt-1 font-mono text-xs text-sub">Track balances and plan your payoff strategy.</p>
         </div>
 
-        {error && (
-          <div className="rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-sm text-rose-200">{error}</div>
-        )}
+        {error && <div className="border border-neg/40 px-3 py-2 font-mono text-xs text-neg">{error}</div>}
 
         {debts.length > 0 && (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <StatCard label="Total debt" value={formatCurrency(totalBalance)} tone="down" icon={CreditCard} />
-            <StatCard label="Monthly minimums" value={formatCurrency(totalMinPayment)} icon={TrendingDown} />
+          <StatRow>
+            <StatCard label="Total debt" value={formatCurrency(totalBalance)} tone="down" />
+            <StatCard label="Monthly minimums" value={formatCurrency(totalMinPayment)} />
             <StatCard label="Avg. interest rate" value={`${weightedRate.toFixed(2)}%`} />
-          </div>
+          </StatRow>
         )}
 
-        <Card>
-          <h2 className="mb-3 font-semibold">Add a debt</h2>
-          <form onSubmit={onSubmit} className="grid grid-cols-1 gap-3 sm:grid-cols-5">
+        <form onSubmit={onSubmit} className="border border-rule p-4">
+          <div className="mb-3 font-mono text-[10.5px] uppercase tracking-[0.1em] text-sub">Add a debt</div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 lg:grid-cols-6">
             <input
               className={`${inputClass} sm:col-span-2`}
               placeholder="Name (e.g. Visa Card)"
@@ -136,7 +133,7 @@ export default function Debts() {
               onChange={(e) => setName(e.target.value)}
               required
             />
-            <select className={inputClass} value={type} onChange={(e) => setType(e.target.value)}>
+            <select className={selectClass} value={type} onChange={(e) => setType(e.target.value)}>
               {TYPES.map((t) => (
                 <option key={t.value} value={t.value}>
                   {t.label}
@@ -162,14 +159,14 @@ export default function Debts() {
             />
             <input
               className={inputClass}
-              placeholder="Minimum monthly payment"
+              placeholder="Min. payment"
               type="number"
               step="0.01"
               value={minPayment}
               onChange={(e) => setMinPayment(e.target.value)}
             />
             <input
-              className={inputClass}
+              className={`${inputClass} sm:col-span-2`}
               placeholder="Due day (1-28)"
               type="number"
               min="1"
@@ -177,49 +174,37 @@ export default function Debts() {
               value={dueDay}
               onChange={(e) => setDueDay(e.target.value)}
             />
-            <Button type="submit" className="sm:col-span-3">
-              <Plus size={16} /> Add debt
-            </Button>
-          </form>
-        </Card>
+          </div>
+          <button className="mt-4 border border-ink bg-ink px-4 py-2 font-mono text-xs uppercase tracking-[0.08em] text-paper transition hover:bg-transparent hover:text-ink">
+            Add debt
+          </button>
+        </form>
 
         {loading ? (
-          <div className="text-sm text-slate-500">Loading...</div>
+          <div className="font-mono text-xs text-sub">Loading...</div>
         ) : debts.length === 0 ? (
-          <EmptyState icon={CreditCard} title="No debts tracked yet" subtitle="Add a credit card or loan above to start planning your payoff." />
+          <EmptyState title="No debts tracked yet" subtitle="Add a credit card or loan above to start planning your payoff." />
         ) : (
           <>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div>
               {debts.map((d) => (
-                <Card key={d.id}>
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <div className="font-semibold">{d.name}</div>
-                      <div className="mt-1">
-                        <Badge>{TYPES.find((t) => t.value === d.type)?.label || d.type}</Badge>
-                      </div>
-                    </div>
-                    <button onClick={() => remove(d.id)} className="text-slate-500 hover:text-rose-400">
-                      <Trash2 size={16} />
-                    </button>
-                  </div>
-                  <div className="mt-4 text-2xl font-semibold text-rose-400">{formatCurrency(d.balance)}</div>
-                  <div className="mt-2 flex justify-between text-xs text-slate-500">
-                    <span>{d.interest_rate}% APR</span>
-                    <span>
-                      {formatCurrency(d.minimum_payment)}/mo min &middot; due day {d.due_day}
-                    </span>
-                  </div>
-                </Card>
+                <LedgerRow
+                  key={d.id}
+                  name={d.name}
+                  meta={`${TYPES.find((t) => t.value === d.type)?.label || d.type} · ${d.interest_rate}% APR · due ${d.due_day}`}
+                  amount={formatCurrency(d.balance)}
+                  tone="down"
+                  onDelete={() => remove(d.id)}
+                />
               ))}
             </div>
 
-            <Card>
-              <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-                <h2 className="font-semibold">Payoff plan</h2>
-                <div className="flex flex-wrap items-center gap-2">
+            <div>
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-4 border-b border-ink pb-3">
+                <h2 className="font-serif text-xl">Payoff plan</h2>
+                <div className="flex flex-wrap items-center gap-5">
                   <select
-                    className={inputClass}
+                    className={selectClass}
                     value={strategy}
                     onChange={(e) => {
                       setStrategy(e.target.value);
@@ -230,7 +215,7 @@ export default function Debts() {
                     <option value="snowball">Snowball (smallest balance first)</option>
                   </select>
                   <input
-                    className={`${inputClass} w-40`}
+                    className={`${inputClass} w-28`}
                     type="number"
                     step="10"
                     value={extraPayment}
@@ -238,51 +223,43 @@ export default function Debts() {
                     placeholder="Extra $/mo"
                   />
                   <Button variant="secondary" onClick={() => loadPlan()} disabled={planLoading}>
-                    {planLoading ? "Calculating..." : "Recalculate"}
+                    {planLoading ? "Calculating" : "Recalculate"}
                   </Button>
                 </div>
               </div>
 
               {plan && (
                 <>
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                    <div>
-                      <div className="text-xs text-slate-500">Debt-free in</div>
-                      <div className="mt-1 text-xl font-semibold">
-                        {plan.months_to_debt_free < 0
-                          ? "50+ years"
-                          : `${plan.months_to_debt_free} mo (${(plan.months_to_debt_free / 12).toFixed(1)} yrs)`}
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-xs text-slate-500">Total interest paid</div>
-                      <div className="mt-1 text-xl font-semibold text-rose-400">{formatCurrency(plan.total_interest_paid)}</div>
-                    </div>
-                    <div>
-                      <div className="text-xs text-slate-500">Total paid</div>
-                      <div className="mt-1 text-xl font-semibold">{formatCurrency(plan.total_paid)}</div>
-                    </div>
-                  </div>
+                  <StatRow className="mb-6">
+                    <StatCard
+                      label="Debt-free in"
+                      value={
+                        plan.months_to_debt_free < 0
+                          ? "50+ yrs"
+                          : `${plan.months_to_debt_free} mo`
+                      }
+                      sub={plan.months_to_debt_free >= 0 ? `${(plan.months_to_debt_free / 12).toFixed(1)} years` : undefined}
+                    />
+                    <StatCard label="Total interest paid" value={formatCurrency(plan.total_interest_paid)} tone="down" />
+                    <StatCard label="Total paid" value={formatCurrency(plan.total_paid)} />
+                  </StatRow>
 
-                  <div className="mt-5 space-y-2">
-                    <div className="text-xs uppercase tracking-wide text-slate-500">Payoff order</div>
+                  <div className="mb-3 font-mono text-[10.5px] uppercase tracking-[0.1em] text-sub">Payoff order</div>
+                  <div>
                     {plan.payoff_order.map((p, i) => (
-                      <div key={p.debt_id} className="flex items-center justify-between rounded-xl bg-slate-800/40 px-4 py-2.5 text-sm">
-                        <div className="flex items-center gap-3">
-                          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500/10 text-xs font-semibold text-emerald-400">
-                            {i + 1}
-                          </span>
-                          {p.name}
-                        </div>
-                        <div className="text-slate-400">
-                          Paid off month {p.payoff_month} &middot; {formatCurrency(p.interest_paid)} interest
-                        </div>
+                      <div key={p.debt_id} className="flex items-baseline gap-3 border-b border-rule py-2.5 last:border-b-0">
+                        <span className="font-mono text-[11px] text-sub">{String(i + 1).padStart(2, "0")}</span>
+                        <span className="font-serif text-[15px]">{p.name}</span>
+                        <span className="relative top-[-4px] flex-1 border-b border-dotted border-rule" />
+                        <span className="whitespace-nowrap font-mono text-xs text-sub">
+                          month {p.payoff_month} &middot; {formatCurrency(p.interest_paid)} interest
+                        </span>
                       </div>
                     ))}
                   </div>
                 </>
               )}
-            </Card>
+            </div>
           </>
         )}
       </div>
