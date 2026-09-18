@@ -66,7 +66,7 @@ export default function Layout({ children }) {
           <div className="rounded-lg bg-emerald-500/10 p-1.5 text-emerald-400">
             <Landmark size={20} strokeWidth={2} />
           </div>
-          <span className="text-lg font-semibold">Finance Tracker</span>
+          <span className="text-lg font-semibold">Runway</span>
         </div>
 
         <NavItems />
@@ -89,7 +89,7 @@ export default function Layout({ children }) {
           <div className="rounded-lg bg-emerald-500/10 p-1.5 text-emerald-400">
             <Landmark size={18} strokeWidth={2} />
           </div>
-          <span className="font-semibold">Finance Tracker</span>
+          <span className="font-semibold">Runway</span>
         </div>
         <button onClick={logout} className="text-xs font-medium text-slate-400 hover:text-slate-100">
           Logout

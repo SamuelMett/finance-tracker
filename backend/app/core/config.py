@@ -2,7 +2,7 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "Finance Tracker API"
+    PROJECT_NAME: str = "Runway API"
 
     # Database
     DATABASE_URL: str = "sqlite:///./finance_tracker.db"

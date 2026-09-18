@@ -86,8 +86,8 @@ export default function Settings() {
               <div className="font-semibold">Two-factor authentication</div>
               <div className="text-sm text-slate-400">
                 {me?.twofa_enabled
-                  ? "Enabled — a code from your authenticator app is required at login."
-                  : "Disabled — add an extra layer of security to your account."}
+                  ? "Enabled: a code from your authenticator app is required at login."
+                  : "Disabled: turn it on to add an extra layer of security to your account."}
               </div>
             </div>
 

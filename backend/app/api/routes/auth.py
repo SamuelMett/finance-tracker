@@ -96,7 +96,7 @@ def twofa_setup(
     db.commit()
     db.refresh(user)
 
-    issuer = "Finance Tracker"
+    issuer = "Runway"
     otp_uri = pyotp.totp.TOTP(secret).provisioning_uri(name=user.email, issuer_name=issuer)
 
     img = qrcode.make(otp_uri)

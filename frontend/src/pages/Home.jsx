@@ -18,28 +18,34 @@ import { Card, Badge, Button } from "../components/ui";
 const FEATURES = [
   {
     icon: Wallet,
-    title: "Accounts & transactions",
-    desc: "Log income and expenses across every checking, savings, cash, and card account, with categories that make sense to you.",
+    title: "Accounts and transactions",
+    desc: "Log income and expenses across every checking, savings, cash, and card account, with categories that actually make sense to you.",
   },
   {
     icon: CreditCard,
     title: "Debt payoff planner",
-    desc: "Add your credit cards and loans, then compare Avalanche vs. Snowball strategies to see exactly when you'll be debt-free.",
+    desc: "Add your credit cards and loans, then compare Avalanche vs. Snowball strategies to see exactly when you'll be debt free.",
+  },
+  {
+    icon: TrendingUp,
+    title: "Cash flow forecast",
+    desc: "See your balance projected forward day by day, based on your bills, debt payments, and paycheck pattern, so a tight week never sneaks up on you.",
+    comingSoon: true,
   },
   {
     icon: Repeat,
     title: "Subscription detection",
-    desc: "We scan your transaction history for recurring charges automatically, so forgotten subscriptions stop draining your account.",
+    desc: "We scan your transaction history for recurring charges automatically, so a forgotten subscription stops quietly draining your account.",
   },
   {
     icon: PieChart,
     title: "One clear dashboard",
-    desc: "Net worth, monthly spend by category, upcoming bills, and total debt — the full picture in a single glance.",
+    desc: "Net worth, monthly spend by category, upcoming bills, and total debt, all in a single glance.",
   },
   {
     icon: ShieldCheck,
     title: "Your data, your account",
-    desc: "Password + optional two-factor authentication. No selling your transaction history to advertisers.",
+    desc: "Password plus optional two-factor authentication. Nobody sells your transaction history to advertisers here.",
   },
   {
     icon: Camera,
@@ -50,9 +56,9 @@ const FEATURES = [
 ];
 
 const STEPS = [
-  { title: "Create your account", desc: "Sign up in under a minute — email and password, 2FA optional." },
-  { title: "Add accounts & log activity", desc: "Set up your accounts, categories, and debts, or import from a bank statement." },
-  { title: "Get the full picture", desc: "Watch your dashboard, payoff plan, and subscriptions update automatically." },
+  { title: "Create your account", desc: "Sign up in under a minute. Email and password, with 2FA if you want it." },
+  { title: "Add accounts and log activity", desc: "Set up your accounts, categories, and debts, or import from a bank statement soon." },
+  { title: "Get the full picture", desc: "Watch your dashboard, payoff plan, and subscriptions update as you go." },
 ];
 
 function MockDashboard() {
@@ -116,8 +122,8 @@ export default function Home() {
               Your money, <span className="text-emerald-400">finally organized.</span>
             </h1>
             <p className="mt-5 max-w-xl text-lg text-slate-400">
-              Finance Tracker brings your accounts, spending, debt payoff, and subscriptions into one place —
-              so you always know exactly where you stand.
+              Runway brings your accounts, spending, debt payoff, and subscriptions into one place, so you always
+              know exactly where you stand, and where you're headed.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link to="/register">
@@ -189,10 +195,10 @@ export default function Home() {
               <FileText size={22} strokeWidth={2} />
             </div>
             <div>
-              <div className="font-semibold">Bank statement import is on the roadmap</div>
+              <div className="font-semibold">Bank statement import and receipt scanning are next</div>
               <p className="mt-1 text-sm text-slate-400">
-                Upload a statement and let it turn into reviewed transactions automatically — coming soon, alongside
-                AI spending insights.
+                Upload a statement or snap a receipt and let it turn into a reviewed transaction on its own. Both
+                are on the way, right alongside the cash flow forecast.
               </p>
             </div>
           </div>
