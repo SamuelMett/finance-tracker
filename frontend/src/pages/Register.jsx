@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { api } from "../api/client";
 
 export default function Register() {
@@ -10,6 +10,8 @@ export default function Register() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  if (localStorage.getItem("token")) return <Navigate to="/dashboard" replace />;
 
   async function onSubmit(e) {
     e.preventDefault();
