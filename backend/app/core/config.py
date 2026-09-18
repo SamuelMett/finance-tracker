@@ -1,0 +1,16 @@
+from pydantic_settings import BaseSettings
+
+
+class Settings(BaseSettings):
+    PROJECT_NAME: str = "Finance Tracker API"
+
+    # Database
+    DATABASE_URL: str = "sqlite:///./finance_tracker.db"
+
+    # JWT
+    JWT_SECRET_KEY: str = "CHANGE_ME_IN_PROD"
+    JWT_ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
+
+
+settings = Settings()
