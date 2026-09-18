@@ -44,15 +44,15 @@ export default function TwoFactorLogin() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-zinc-950 px-4 text-zinc-100">
+    <div className="min-h-screen w-full bg-slate-950 px-4 text-slate-100">
       <div className="mx-auto flex min-h-screen w-full max-w-md items-center">
-        <div className="w-full rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6 shadow">
+        <div className="w-full rounded-2xl border border-slate-800 bg-slate-900/40 p-6 shadow">
           <h1 className="text-xl font-semibold">Two-Factor Code</h1>
-          <p className="mt-1 text-sm text-zinc-400">Enter the 6-digit code from your authenticator app.</p>
-          <p className="mt-3 text-xs text-zinc-500">Account: {email}</p>
+          <p className="mt-1 text-sm text-slate-400">Enter the 6-digit code from your authenticator app.</p>
+          <p className="mt-3 text-xs text-slate-500">Account: {email}</p>
 
           {error && (
-            <div className="mt-4 rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-200">
+            <div className="mt-4 rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-sm text-rose-200">
               {error}
             </div>
           )}
@@ -64,12 +64,12 @@ export default function TwoFactorLogin() {
               inputMode="numeric"
               placeholder="123456"
               autoFocus
-              className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-center text-lg tracking-[0.5em] outline-none focus:border-indigo-500"
+              className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-center text-lg tracking-[0.5em] outline-none focus:border-emerald-500"
             />
 
             <button
               disabled={loading || otp.length !== 6}
-              className="w-full rounded-lg bg-indigo-600 py-2 font-medium hover:bg-indigo-500 disabled:opacity-60"
+              className="w-full rounded-lg bg-emerald-500 py-2 font-medium hover:bg-emerald-400 disabled:opacity-60"
             >
               {loading ? "Verifying..." : "Verify & Continue"}
             </button>
