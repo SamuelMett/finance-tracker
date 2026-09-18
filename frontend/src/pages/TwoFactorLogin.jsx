@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 import { api, setAuthToken } from "../api/client";
 
 export default function TwoFactorLogin() {
@@ -45,7 +46,14 @@ export default function TwoFactorLogin() {
 
   return (
     <div className="min-h-screen w-full bg-slate-950 px-4 text-slate-100">
-      <div className="mx-auto flex min-h-screen w-full max-w-md items-center">
+      <div className="mx-auto flex min-h-screen w-full max-w-md flex-col justify-center py-10">
+        <Link
+          to="/login"
+          className="mb-6 inline-flex w-fit items-center gap-1.5 text-sm font-medium text-slate-400 hover:text-slate-100"
+        >
+          <ArrowLeft size={16} />
+          Back to login
+        </Link>
         <div className="w-full rounded-2xl border border-slate-800 bg-slate-900/40 p-6 shadow">
           <h1 className="text-xl font-semibold">Two-Factor Code</h1>
           <p className="mt-1 text-sm text-slate-400">Enter the 6-digit code from your authenticator app.</p>

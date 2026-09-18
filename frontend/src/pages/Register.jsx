@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 import { api } from "../api/client";
+import RunwayMark from "../components/RunwayMark";
 
 export default function Register() {
   const nav = useNavigate();
@@ -40,10 +42,20 @@ export default function Register() {
 
   return (
     <div className="min-h-screen w-full bg-slate-950 px-4 text-slate-100">
-      <div className="mx-auto flex min-h-screen w-full max-w-md items-center">
+      <div className="mx-auto flex min-h-screen w-full max-w-md flex-col justify-center py-10">
+        <Link
+          to="/"
+          className="mb-6 inline-flex w-fit items-center gap-1.5 text-sm font-medium text-slate-400 hover:text-slate-100"
+        >
+          <ArrowLeft size={16} />
+          Back to home
+        </Link>
         <div className="w-full rounded-2xl border border-slate-800 bg-slate-900/40 p-6 shadow">
           <div className="mb-5">
-            <div className="text-2xl font-semibold text-emerald-400">Runway</div>
+            <Link to="/" className="inline-flex items-center gap-2 text-2xl font-semibold text-emerald-400">
+              <RunwayMark size={22} />
+              Runway
+            </Link>
             <div className="mt-1 text-sm text-slate-400">Create an account.</div>
           </div>
 
