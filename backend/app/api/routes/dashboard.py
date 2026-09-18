@@ -78,17 +78,12 @@ def summary(user: User = Depends(get_current_user), db: Session = Depends(get_db
         .filter(RecurringSeries.user_id == user.id, RecurringSeries.status == "active")
         .all()
     )
-    monthly_recurring_total = sum(
-        r.amount * MONTHLY_MULTIPLIER.get(r.frequency, 1.0) for r in active_recurring
-    )
+    active_bills = [r for r in active_recurring if r.kind == "expense"]
+    monthly_recurring_total = sum(r.amount * MONTHLY_MULTIPLIER.get(r.frequency, 1.0) for r in active_bills)
 
     soon = today + timedelta(days=14)
     upcoming_bills = sorted(
-        (
-            r
-            for r in active_recurring
-            if r.next_due_date is not None and today <= r.next_due_date <= soon
-        ),
+        (r for r in active_bills if r.next_due_date is not None and today <= r.next_due_date <= soon),
         key=lambda r: r.next_due_date,
     )[:8]
 

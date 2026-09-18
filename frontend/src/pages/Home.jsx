@@ -30,7 +30,6 @@ const FEATURES = [
     icon: TrendingUp,
     title: "Cash flow forecast",
     desc: "See your balance projected forward day by day, based on your bills, debt payments, and paycheck pattern, so a tight week never sneaks up on you.",
-    comingSoon: true,
   },
   {
     icon: Repeat,
@@ -198,7 +197,7 @@ export default function Home() {
               <div className="font-semibold">Bank statement import and receipt scanning are next</div>
               <p className="mt-1 text-sm text-slate-400">
                 Upload a statement or snap a receipt and let it turn into a reviewed transaction on its own. Both
-                are on the way, right alongside the cash flow forecast.
+                are on the way.
               </p>
             </div>
           </div>

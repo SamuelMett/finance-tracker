@@ -34,7 +34,6 @@ const SECTIONS = [
       "Flags the exact day a tight stretch might hit, before it hits",
       "Built on top of the same recurring-bill detection already tracking your subscriptions",
     ],
-    comingSoon: true,
   },
   {
     icon: Repeat,

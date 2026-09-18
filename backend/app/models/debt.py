@@ -15,6 +15,7 @@ class Debt(Base):
     balance = Column(Float, nullable=False, default=0.0)
     interest_rate = Column(Float, nullable=False, default=0.0)  # APR, percent (e.g. 21.99)
     minimum_payment = Column(Float, nullable=False, default=0.0)
+    due_day = Column(Integer, nullable=False, default=1)  # day of month the minimum payment is due, 1-28
 
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 

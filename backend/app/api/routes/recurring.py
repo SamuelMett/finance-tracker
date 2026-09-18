@@ -36,13 +36,15 @@ def _classify_frequency(median_interval: float) -> str | None:
 
 
 @router.get("", response_model=list[RecurringOut])
-def list_recurring(user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    return (
-        db.query(RecurringSeries)
-        .filter(RecurringSeries.user_id == user.id)
-        .order_by(RecurringSeries.next_due_date.is_(None), RecurringSeries.next_due_date)
-        .all()
-    )
+def list_recurring(
+    kind: str | None = None,
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    q = db.query(RecurringSeries).filter(RecurringSeries.user_id == user.id)
+    if kind is not None:
+        q = q.filter(RecurringSeries.kind == kind)
+    return q.order_by(RecurringSeries.next_due_date.is_(None), RecurringSeries.next_due_date).all()
 
 
 @router.post("", response_model=RecurringOut, status_code=status.HTTP_201_CREATED)
@@ -93,26 +95,26 @@ def delete_recurring(series_id: int, user: User = Depends(get_current_user), db:
 def detect_recurring(user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     transactions = (
         db.query(Transaction)
-        .filter(Transaction.user_id == user.id, Transaction.kind == "expense")
+        .filter(Transaction.user_id == user.id)
         .order_by(Transaction.date)
         .all()
     )
 
-    groups: dict[str, list[Transaction]] = defaultdict(list)
+    groups: dict[tuple[str, str], list[Transaction]] = defaultdict(list)
     for t in transactions:
         key = _normalize(t.description or "")
         if key:
-            groups[key].append(t)
+            groups[(t.kind, key)].append(t)
 
     existing = {
-        _normalize(s.name): s
+        (s.kind, _normalize(s.name)): s
         for s in db.query(RecurringSeries).filter(RecurringSeries.user_id == user.id).all()
     }
 
     created = 0
     updated = 0
 
-    for key, txs in groups.items():
+    for (kind, key), txs in groups.items():
         if len(txs) < 2:
             continue
 
@@ -142,7 +144,7 @@ def detect_recurring(user: User = Depends(get_current_user), db: Session = Depen
 
         display_name = max(txs, key=lambda t: t.date).description or key.title()
 
-        existing_series = existing.get(key)
+        existing_series = existing.get((kind, key))
         if existing_series:
             if existing_series.status == "active":
                 existing_series.amount = round(avg_amount, 2)
@@ -154,6 +156,7 @@ def detect_recurring(user: User = Depends(get_current_user), db: Session = Depen
             series = RecurringSeries(
                 user_id=user.id,
                 name=display_name,
+                kind=kind,
                 amount=round(avg_amount, 2),
                 frequency=frequency,
                 next_due_date=next_due,

@@ -7,6 +7,7 @@ class DebtCreate(BaseModel):
     balance: float
     interest_rate: float = 0.0
     minimum_payment: float = 0.0
+    due_day: int = 1
 
 
 class DebtUpdate(BaseModel):
@@ -15,6 +16,7 @@ class DebtUpdate(BaseModel):
     balance: float | None = None
     interest_rate: float | None = None
     minimum_payment: float | None = None
+    due_day: int | None = None
 
 
 class DebtOut(BaseModel):
@@ -24,6 +26,7 @@ class DebtOut(BaseModel):
     balance: float
     interest_rate: float
     minimum_payment: float
+    due_day: int
 
     class Config:
         from_attributes = True
