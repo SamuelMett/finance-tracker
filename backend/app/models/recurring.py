@@ -13,6 +13,7 @@ class RecurringSeries(Base):
     category_id = Column(Integer, ForeignKey("categories.id"), nullable=True)
 
     name = Column(String, nullable=False)
+    kind = Column(String, nullable=False, default="expense")  # income, expense
     amount = Column(Float, nullable=False)
     frequency = Column(String, nullable=False, default="monthly")  # weekly, biweekly, monthly, yearly
     next_due_date = Column(Date, nullable=True)

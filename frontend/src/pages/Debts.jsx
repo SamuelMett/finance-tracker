@@ -24,6 +24,7 @@ export default function Debts() {
   const [balance, setBalance] = useState("");
   const [rate, setRate] = useState("");
   const [minPayment, setMinPayment] = useState("");
+  const [dueDay, setDueDay] = useState("1");
 
   const [strategy, setStrategy] = useState("avalanche");
   const [extraPayment, setExtraPayment] = useState("100");
@@ -77,12 +78,14 @@ export default function Debts() {
         balance: parseFloat(balance),
         interest_rate: parseFloat(rate || "0"),
         minimum_payment: parseFloat(minPayment || "0"),
+        due_day: parseInt(dueDay || "1", 10),
       });
       setName("");
       setType("credit_card");
       setBalance("");
       setRate("");
       setMinPayment("");
+      setDueDay("1");
       load();
     } catch (err) {
       setError(err?.response?.data?.detail || "Failed to add debt.");
@@ -158,12 +161,21 @@ export default function Debts() {
               onChange={(e) => setRate(e.target.value)}
             />
             <input
-              className={`${inputClass} sm:col-span-2`}
+              className={inputClass}
               placeholder="Minimum monthly payment"
               type="number"
               step="0.01"
               value={minPayment}
               onChange={(e) => setMinPayment(e.target.value)}
+            />
+            <input
+              className={inputClass}
+              placeholder="Due day (1-28)"
+              type="number"
+              min="1"
+              max="28"
+              value={dueDay}
+              onChange={(e) => setDueDay(e.target.value)}
             />
             <Button type="submit" className="sm:col-span-3">
               <Plus size={16} /> Add debt
@@ -194,7 +206,9 @@ export default function Debts() {
                   <div className="mt-4 text-2xl font-semibold text-rose-400">{formatCurrency(d.balance)}</div>
                   <div className="mt-2 flex justify-between text-xs text-slate-500">
                     <span>{d.interest_rate}% APR</span>
-                    <span>{formatCurrency(d.minimum_payment)}/mo min</span>
+                    <span>
+                      {formatCurrency(d.minimum_payment)}/mo min &middot; due day {d.due_day}
+                    </span>
                   </div>
                 </Card>
               ))}

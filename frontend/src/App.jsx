@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import TwoFactorLogin from "./pages/TwoFactorLogin";
 import Dashboard from "./pages/Dashboard";
+import Forecast from "./pages/Forecast";
 import Transactions from "./pages/Transactions";
 import Accounts from "./pages/Accounts";
 import Categories from "./pages/Categories";
@@ -32,6 +33,14 @@ export default function App() {
         element={
           <ProtectedRoute>
             <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/forecast"
+        element={
+          <ProtectedRoute>
+            <Forecast />
           </ProtectedRoute>
         }
       />

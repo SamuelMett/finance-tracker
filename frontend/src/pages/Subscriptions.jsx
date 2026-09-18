@@ -32,7 +32,7 @@ export default function Subscriptions() {
   async function load() {
     setLoading(true);
     try {
-      const res = await api.get("/recurring");
+      const res = await api.get("/recurring?kind=expense");
       setItems(res.data);
     } catch (err) {
       setError(err?.response?.data?.detail || "Failed to load subscriptions.");
@@ -50,7 +50,7 @@ export default function Subscriptions() {
     setScanResult(null);
     try {
       const res = await api.post("/recurring/detect");
-      setItems(res.data.series);
+      setItems(res.data.series.filter((s) => s.kind === "expense"));
       setScanResult({ created: res.data.created, updated: res.data.updated });
     } catch (err) {
       setError(err?.response?.data?.detail || "Scan failed.");
@@ -66,6 +66,7 @@ export default function Subscriptions() {
     try {
       await api.post("/recurring", {
         name: name.trim(),
+        kind: "expense",
         amount: parseFloat(amount),
         frequency,
         next_due_date: nextDue || null,

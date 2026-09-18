@@ -6,6 +6,7 @@ import {
   Tags,
   CreditCard,
   Repeat,
+  TrendingUp,
   Settings as SettingsIcon,
   LogOut,
   Landmark,
@@ -14,6 +15,7 @@ import { setAuthToken } from "../api/client";
 
 const links = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { to: "/forecast", label: "Forecast", icon: TrendingUp },
   { to: "/transactions", label: "Transactions", icon: ArrowLeftRight },
   { to: "/accounts", label: "Accounts", icon: Wallet },
   { to: "/debts", label: "Debts", icon: CreditCard },

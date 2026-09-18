@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.db.base import Base
 from app.db.session import engine
-from app.api.routes import accounts, auth, categories, dashboard, debts, recurring, transactions
+from app.api.routes import accounts, auth, categories, dashboard, debts, forecast, recurring, transactions
 
 Base.metadata.create_all(bind=engine)
 
@@ -33,6 +33,7 @@ app.include_router(transactions.router, prefix="/transactions", tags=["transacti
 app.include_router(dashboard.router, prefix="/dashboard", tags=["dashboard"])
 app.include_router(debts.router, prefix="/debts", tags=["debts"])
 app.include_router(recurring.router, prefix="/recurring", tags=["recurring"])
+app.include_router(forecast.router, prefix="/forecast", tags=["forecast"])
 
 
 @app.get("/health")

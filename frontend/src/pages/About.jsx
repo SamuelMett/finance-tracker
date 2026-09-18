@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Wallet, CreditCard, Repeat, PieChart, ShieldCheck, TrendingUp, ArrowRight } from "lucide-react";
 import PublicNav from "../components/PublicNav";
 import PublicFooter from "../components/PublicFooter";
-import { Card, Badge, Button } from "../components/ui";
+import { Card, Button } from "../components/ui";
 
 const PRINCIPLES = [
   {
@@ -49,17 +49,14 @@ export default function About() {
               <TrendingUp size={22} strokeWidth={2} />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-2xl font-semibold">What makes Runway different</h2>
-                <Badge tone="violet">Coming soon</Badge>
-              </div>
+              <h2 className="text-2xl font-semibold">What makes Runway different</h2>
               <p className="mt-3 leading-relaxed text-slate-400">
                 Almost every budgeting app looks backward: here's what you spent last month, sorted into categories.
-                That's useful, but it doesn't tell you what's about to happen. Runway is building a cash flow
-                forecast that combines your recurring bills, your debt payments, and the income pattern it detects
-                from your paychecks, then projects your balance forward day by day. If a tight week is coming, you'll
-                see it two weeks out instead of finding out when a payment bounces. It's the kind of forecasting
-                small businesses pay real money for, built for a personal budget instead.
+                That's useful, but it doesn't tell you what's about to happen. Runway's cash flow forecast combines
+                your recurring bills, your debt payments, and the income pattern it detects from your paychecks,
+                then projects your balance forward day by day. If a tight week is coming, you'll see it two weeks
+                out instead of finding out when a payment bounces. It's the kind of forecasting small businesses pay
+                real money for, built for a personal budget instead.
               </p>
             </div>
           </div>

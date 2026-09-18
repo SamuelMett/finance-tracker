@@ -5,6 +5,7 @@ from pydantic import BaseModel
 
 class RecurringCreate(BaseModel):
     name: str
+    kind: str = "expense"  # income, expense
     amount: float
     frequency: str = "monthly"  # weekly, biweekly, monthly, yearly
     next_due_date: date_type | None = None
@@ -14,6 +15,7 @@ class RecurringCreate(BaseModel):
 
 class RecurringUpdate(BaseModel):
     name: str | None = None
+    kind: str | None = None
     amount: float | None = None
     frequency: str | None = None
     next_due_date: date_type | None = None
@@ -25,6 +27,7 @@ class RecurringUpdate(BaseModel):
 class RecurringOut(BaseModel):
     id: int
     name: str
+    kind: str
     amount: float
     frequency: str
     next_due_date: date_type | None
