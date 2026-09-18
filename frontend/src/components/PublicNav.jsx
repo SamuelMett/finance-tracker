@@ -16,23 +16,21 @@ export default function PublicNav() {
   const loggedIn = !!localStorage.getItem("token");
 
   return (
-    <header className="sticky top-0 z-20 border-b border-slate-800/80 bg-slate-950/80 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
-        <Link to="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
-          <div className="rounded-lg bg-emerald-500/10 p-1.5 text-emerald-400">
-            <RunwayMark size={20} />
-          </div>
-          <span className="text-lg font-semibold">Runway</span>
+    <header className="sticky top-0 z-20 border-b border-rule bg-paper">
+      <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6">
+        <Link to="/" className="flex items-center gap-2.5" onClick={() => setOpen(false)}>
+          <RunwayMark size={22} />
+          <span className="font-serif text-lg">Runway</span>
         </Link>
 
-        <nav className="hidden items-center gap-1 sm:flex">
+        <nav className="hidden items-center gap-6 sm:flex">
           {LINKS.map((l) => (
             <NavLink
               key={l.to}
               to={l.to}
               end={l.end}
               className={({ isActive }) =>
-                `rounded-lg px-3 py-2 text-sm font-medium ${isActive ? "text-emerald-400" : "text-slate-400 hover:text-slate-100"}`
+                `font-mono text-[11px] uppercase tracking-[0.08em] ${isActive ? "text-ink" : "text-sub hover:text-ink"}`
               }
             >
               {l.label}
@@ -40,14 +38,14 @@ export default function PublicNav() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-2 sm:flex">
+        <div className="hidden items-center gap-5 sm:flex">
           {loggedIn ? (
             <Link to="/dashboard">
               <Button className="!px-4 !py-2">Go to dashboard</Button>
             </Link>
           ) : (
             <>
-              <Link to="/login" className="rounded-lg px-3 py-2 text-sm font-medium text-slate-300 hover:text-slate-100">
+              <Link to="/login" className="font-mono text-[11px] uppercase tracking-[0.08em] text-sub hover:text-ink">
                 Log in
               </Link>
               <Link to="/register">
@@ -57,18 +55,14 @@ export default function PublicNav() {
           )}
         </div>
 
-        <button
-          onClick={() => setOpen((v) => !v)}
-          className="rounded-lg p-2 text-slate-300 hover:bg-slate-800/60 sm:hidden"
-          aria-label="Toggle menu"
-        >
+        <button onClick={() => setOpen((v) => !v)} className="p-1 text-ink sm:hidden" aria-label="Toggle menu">
           {open ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
       {open && (
-        <div className="border-t border-slate-800/80 px-4 py-3 sm:hidden">
-          <nav className="flex flex-col gap-1">
+        <div className="border-t border-rule px-4 py-3 sm:hidden">
+          <nav className="flex flex-col gap-3">
             {LINKS.map((l) => (
               <NavLink
                 key={l.to}
@@ -76,14 +70,14 @@ export default function PublicNav() {
                 end={l.end}
                 onClick={() => setOpen(false)}
                 className={({ isActive }) =>
-                  `rounded-lg px-3 py-2 text-sm font-medium ${isActive ? "text-emerald-400" : "text-slate-400 hover:text-slate-100"}`
+                  `font-mono text-[11px] uppercase tracking-[0.08em] ${isActive ? "text-ink" : "text-sub"}`
                 }
               >
                 {l.label}
               </NavLink>
             ))}
           </nav>
-          <div className="mt-3 flex flex-col gap-2 border-t border-slate-800/80 pt-3">
+          <div className="mt-4 flex flex-col gap-3 border-t border-rule pt-3">
             {loggedIn ? (
               <Link to="/dashboard" onClick={() => setOpen(false)}>
                 <Button className="w-full !py-2">Go to dashboard</Button>
@@ -93,7 +87,7 @@ export default function PublicNav() {
                 <Link
                   to="/login"
                   onClick={() => setOpen(false)}
-                  className="rounded-lg px-3 py-2 text-center text-sm font-medium text-slate-300 hover:text-slate-100"
+                  className="font-mono text-[11px] uppercase tracking-[0.08em] text-sub"
                 >
                   Log in
                 </Link>

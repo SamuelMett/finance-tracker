@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { Repeat, Plus, Trash2, Sparkles, Ban, CheckCircle2 } from "lucide-react";
+import { Repeat, Sparkles } from "lucide-react";
 import Layout from "../components/Layout";
 import { api } from "../api/client";
 import { formatCurrency, formatDate } from "../lib/format";
-import { Card, StatCard, Badge, EmptyState, Button, inputClass } from "../components/ui";
+import { StatCard, Badge, EmptyState, Button, LedgerRow, inputClass, selectClass } from "../components/ui";
 
 const FREQUENCIES = [
   { value: "weekly", label: "Weekly", multiplier: 4.345 },
@@ -106,24 +106,22 @@ export default function Subscriptions() {
 
   return (
     <Layout>
-      <div className="space-y-6">
-        <div className="flex flex-wrap items-start justify-between gap-3">
+      <div className="space-y-8">
+        <div className="flex flex-wrap items-start justify-between gap-4 border-b border-ink pb-3">
           <div>
-            <h1 className="text-2xl font-semibold">Subscriptions & Bills</h1>
-            <p className="mt-1 text-sm text-slate-400">Recurring charges, detected automatically from your transactions.</p>
+            <h1 className="font-serif text-2xl">Subscriptions &amp; bills</h1>
+            <p className="mt-1 font-mono text-xs text-sub">Recurring charges, detected automatically from your transactions.</p>
           </div>
           <Button onClick={scan} disabled={scanning}>
-            <Sparkles size={16} />
-            {scanning ? "Scanning..." : "Scan transactions"}
+            <Sparkles size={14} />
+            {scanning ? "Scanning" : "Scan transactions"}
           </Button>
         </div>
 
-        {error && (
-          <div className="rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-sm text-rose-200">{error}</div>
-        )}
+        {error && <div className="border border-neg/40 px-3 py-2 font-mono text-xs text-neg">{error}</div>}
         {scanResult && (
-          <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-3 text-sm text-emerald-200">
-            Scan complete — found {scanResult.created} new recurring charge{scanResult.created === 1 ? "" : "s"}, updated{" "}
+          <div className="border border-pos/40 px-3 py-2 font-mono text-xs text-pos">
+            Scan complete. Found {scanResult.created} new recurring charge{scanResult.created === 1 ? "" : "s"}, updated{" "}
             {scanResult.updated}.
           </div>
         )}
@@ -134,13 +132,12 @@ export default function Subscriptions() {
             value={`${formatCurrency(monthlyTotal)} / mo`}
             sub={`${active.length} active subscription${active.length === 1 ? "" : "s"}`}
             tone="down"
-            icon={Repeat}
           />
         )}
 
-        <Card>
-          <h2 className="mb-3 font-semibold">Add manually</h2>
-          <form onSubmit={onSubmit} className="grid grid-cols-1 gap-3 sm:grid-cols-5">
+        <form onSubmit={onSubmit} className="border border-rule p-4">
+          <div className="mb-3 font-mono text-[10.5px] uppercase tracking-[0.1em] text-sub">Add manually</div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-5">
             <input
               className={`${inputClass} sm:col-span-2`}
               placeholder="Name (e.g. Spotify)"
@@ -157,7 +154,7 @@ export default function Subscriptions() {
               onChange={(e) => setAmount(e.target.value)}
               required
             />
-            <select className={inputClass} value={frequency} onChange={(e) => setFrequency(e.target.value)}>
+            <select className={selectClass} value={frequency} onChange={(e) => setFrequency(e.target.value)}>
               {FREQUENCIES.map((f) => (
                 <option key={f.value} value={f.value}>
                   {f.label}
@@ -165,14 +162,14 @@ export default function Subscriptions() {
               ))}
             </select>
             <input className={inputClass} type="date" value={nextDue} onChange={(e) => setNextDue(e.target.value)} />
-            <Button type="submit" className="sm:col-span-5">
-              <Plus size={16} /> Add subscription
-            </Button>
-          </form>
-        </Card>
+          </div>
+          <button className="mt-4 border border-ink bg-ink px-4 py-2 font-mono text-xs uppercase tracking-[0.08em] text-paper transition hover:bg-transparent hover:text-ink">
+            Add subscription
+          </button>
+        </form>
 
         {loading ? (
-          <div className="text-sm text-slate-500">Loading...</div>
+          <div className="font-mono text-xs text-sub">Loading...</div>
         ) : active.length === 0 && cancelled.length === 0 ? (
           <EmptyState
             icon={Repeat}
@@ -180,58 +177,53 @@ export default function Subscriptions() {
             subtitle="Log a few months of transactions, then hit Scan to auto-detect recurring charges."
           />
         ) : (
-          <div className="space-y-3">
+          <div>
             {active.map((item) => (
-              <Card key={item.id} className="flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <div className="flex items-center gap-2 font-medium">
+              <LedgerRow
+                key={item.id}
+                name={
+                  <span className="inline-flex items-center gap-2">
                     {item.name}
-                    {item.source === "detected" && <Badge tone="violet">Auto-detected</Badge>}
+                    {item.source === "detected" && <Badge tone="violet">detected</Badge>}
+                  </span>
+                }
+                meta={`${FREQUENCIES.find((f) => f.value === item.frequency)?.label || item.frequency}${
+                  item.next_due_date ? ` · due ${formatDate(item.next_due_date)}` : ""
+                }`}
+                amount={`${formatCurrency(item.amount)} (${formatCurrency(monthlyEquivalent(item))}/mo)`}
+                tone="down"
+                right={
+                  <div className="flex gap-3 font-mono text-[10px] text-sub">
+                    <button onClick={() => setStatus(item.id, "cancelled")} className="hover:text-ink">
+                      cancel
+                    </button>
+                    <button onClick={() => remove(item.id)} className="hover:text-neg">
+                      del
+                    </button>
                   </div>
-                  <div className="mt-1 text-xs text-slate-500">
-                    {FREQUENCIES.find((f) => f.value === item.frequency)?.label || item.frequency}
-                    {item.next_due_date && <> &middot; next due {formatDate(item.next_due_date)}</>}
-                  </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="text-right">
-                    <div className="font-semibold">{formatCurrency(item.amount)}</div>
-                    <div className="text-xs text-slate-500">{formatCurrency(monthlyEquivalent(item))}/mo</div>
-                  </div>
-                  <button
-                    title="Mark cancelled"
-                    onClick={() => setStatus(item.id, "cancelled")}
-                    className="text-slate-500 hover:text-amber-400"
-                  >
-                    <Ban size={16} />
-                  </button>
-                  <button title="Delete" onClick={() => remove(item.id)} className="text-slate-500 hover:text-rose-400">
-                    <Trash2 size={16} />
-                  </button>
-                </div>
-              </Card>
+                }
+              />
             ))}
 
             {cancelled.length > 0 && (
-              <div className="pt-4">
-                <div className="mb-2 text-xs uppercase tracking-wide text-slate-500">Cancelled</div>
+              <div className="mt-6">
+                <div className="mb-2 font-mono text-[10.5px] uppercase tracking-[0.08em] text-sub">Cancelled</div>
                 {cancelled.map((item) => (
-                  <Card key={item.id} className="mb-2 flex items-center justify-between gap-3 opacity-60">
-                    <div className="font-medium line-through">{item.name}</div>
-                    <div className="flex items-center gap-4">
-                      <div className="text-sm">{formatCurrency(item.amount)}</div>
-                      <button
-                        title="Reactivate"
-                        onClick={() => setStatus(item.id, "active")}
-                        className="text-slate-500 hover:text-emerald-400"
-                      >
-                        <CheckCircle2 size={16} />
-                      </button>
-                      <button title="Delete" onClick={() => remove(item.id)} className="text-slate-500 hover:text-rose-400">
-                        <Trash2 size={16} />
-                      </button>
-                    </div>
-                  </Card>
+                  <LedgerRow
+                    key={item.id}
+                    name={<span className="text-sub line-through">{item.name}</span>}
+                    amount={formatCurrency(item.amount)}
+                    right={
+                      <div className="flex gap-3 font-mono text-[10px] text-sub">
+                        <button onClick={() => setStatus(item.id, "active")} className="hover:text-ink">
+                          reactivate
+                        </button>
+                        <button onClick={() => remove(item.id)} className="hover:text-neg">
+                          del
+                        </button>
+                      </div>
+                    }
+                  />
                 ))}
               </div>
             )}

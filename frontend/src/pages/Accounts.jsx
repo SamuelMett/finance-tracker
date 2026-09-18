@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import { api } from "../api/client";
 import { formatCurrency } from "../lib/format";
+import { EmptyState, LedgerRow, inputClass, selectClass } from "../components/ui";
 
 const TYPES = [
   { value: "checking", label: "Checking" },
@@ -68,30 +69,24 @@ export default function Accounts() {
 
   return (
     <Layout>
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-semibold">Accounts</h1>
-          <p className="mt-1 text-sm text-slate-400">Track balances across your bank, cash, and card accounts.</p>
+      <div className="space-y-8">
+        <div className="border-b border-ink pb-3">
+          <h1 className="font-serif text-2xl">Accounts</h1>
+          <p className="mt-1 font-mono text-xs text-sub">Track balances across your bank, cash, and card accounts.</p>
         </div>
 
-        {error && (
-          <div className="rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-sm text-rose-200">{error}</div>
-        )}
+        {error && <div className="border border-neg/40 px-3 py-2 font-mono text-xs text-neg">{error}</div>}
 
-        <form onSubmit={onSubmit} className="rounded-2xl border border-slate-800 bg-slate-900/30 p-4">
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
+        <form onSubmit={onSubmit} className="border border-rule p-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
             <input
-              className="rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm outline-none focus:border-emerald-500 sm:col-span-2"
+              className={`${inputClass} sm:col-span-2`}
               placeholder="Account name (e.g. Chase Checking)"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
             />
-            <select
-              className="rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm outline-none focus:border-emerald-500"
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-            >
+            <select className={selectClass} value={type} onChange={(e) => setType(e.target.value)}>
               {TYPES.map((t) => (
                 <option key={t.value} value={t.value}>
                   {t.label}
@@ -99,7 +94,7 @@ export default function Accounts() {
               ))}
             </select>
             <input
-              className="rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm outline-none focus:border-emerald-500"
+              className={inputClass}
               placeholder="Starting balance"
               type="number"
               step="0.01"
@@ -107,40 +102,26 @@ export default function Accounts() {
               onChange={(e) => setStartingBalance(e.target.value)}
             />
           </div>
-          <button className="mt-3 rounded-lg bg-emerald-500 px-4 py-2 text-sm font-medium hover:bg-emerald-400">
+          <button className="mt-4 border border-ink bg-ink px-4 py-2 font-mono text-xs uppercase tracking-[0.08em] text-paper transition hover:bg-transparent hover:text-ink">
             Add account
           </button>
         </form>
 
         {loading ? (
-          <div className="text-sm text-slate-500">Loading...</div>
+          <div className="font-mono text-xs text-sub">Loading...</div>
         ) : accounts.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-slate-800 p-8 text-center text-sm text-slate-500">
-            No accounts yet. Add one above.
-          </div>
+          <EmptyState title="No accounts yet" subtitle="Add one above." />
         ) : (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div>
             {accounts.map((a) => (
-              <div key={a.id} className="rounded-2xl border border-slate-800 bg-slate-900/30 p-5">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <div className="font-semibold">{a.name}</div>
-                    <div className="text-xs uppercase tracking-wide text-slate-500">
-                      {TYPES.find((t) => t.value === a.type)?.label || a.type}
-                    </div>
-                  </div>
-                  <button onClick={() => remove(a.id)} className="text-xs text-slate-500 hover:text-rose-400">
-                    Delete
-                  </button>
-                </div>
-                <div
-                  className={`mt-4 text-2xl font-semibold ${
-                    a.balance < 0 ? "text-rose-400" : "text-slate-100"
-                  }`}
-                >
-                  {formatCurrency(a.balance)}
-                </div>
-              </div>
+              <LedgerRow
+                key={a.id}
+                name={a.name}
+                meta={TYPES.find((t) => t.value === a.type)?.label || a.type}
+                amount={formatCurrency(a.balance)}
+                tone={a.balance < 0 ? "down" : "default"}
+                onDelete={() => remove(a.id)}
+              />
             ))}
           </div>
         )}

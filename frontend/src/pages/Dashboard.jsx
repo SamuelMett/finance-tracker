@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from "recharts";
-import { Wallet, TrendingUp, TrendingDown, CreditCard, Repeat, CalendarClock } from "lucide-react";
+import { CalendarClock } from "lucide-react";
 import Layout from "../components/Layout";
 import { api } from "../api/client";
 import { formatCurrency, formatDate } from "../lib/format";
-import { Card, StatCard, EmptyState } from "../components/ui";
+import { Card, StatRow, StatCard, EmptyState, LedgerRow } from "../components/ui";
 
 export default function Dashboard() {
   const [data, setData] = useState(null);
@@ -21,36 +21,40 @@ export default function Dashboard() {
 
   return (
     <Layout>
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-semibold">Dashboard</h1>
-          <p className="mt-1 text-sm text-slate-400">Your financial overview for this month.</p>
+      <div className="space-y-8">
+        <div className="border-b border-ink pb-3">
+          <h1 className="font-serif text-2xl">Dashboard</h1>
+          <p className="mt-1 font-mono text-xs text-sub">Your financial overview for this month.</p>
         </div>
 
-        {error && (
-          <div className="rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-sm text-rose-200">{error}</div>
-        )}
+        {error && <div className="border border-neg/40 px-3 py-2 font-mono text-xs text-neg">{error}</div>}
 
         {loading ? (
-          <div className="text-sm text-slate-500">Loading...</div>
+          <div className="font-mono text-xs text-sub">Loading...</div>
         ) : (
           data && (
             <>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
-                <StatCard label="Net worth" value={formatCurrency(data.net_worth)} icon={Wallet} />
-                <StatCard label="Income this month" value={formatCurrency(data.month_income)} tone="up" icon={TrendingUp} />
-                <StatCard label="Expenses this month" value={formatCurrency(data.month_expense)} tone="down" icon={TrendingDown} />
-                <StatCard label="Total debt" value={formatCurrency(data.total_debt)} tone={data.total_debt > 0 ? "down" : "default"} icon={CreditCard} />
-                <StatCard label="Recurring spend" value={`${formatCurrency(data.monthly_recurring_total)}/mo`} icon={Repeat} />
-              </div>
+              <StatRow>
+                <StatCard label="Net worth" value={formatCurrency(data.net_worth)} />
+                <StatCard label="Income, this month" value={formatCurrency(data.month_income)} tone="up" />
+                <StatCard label="Expenses, this month" value={formatCurrency(data.month_expense)} tone="down" />
+                <StatCard
+                  label="Total debt"
+                  value={formatCurrency(data.total_debt)}
+                  tone={data.total_debt > 0 ? "down" : "default"}
+                />
+                <StatCard label="Recurring spend" value={`${formatCurrency(data.monthly_recurring_total)}/mo`} />
+              </StatRow>
 
-              <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                <Card>
-                  <h2 className="font-semibold">Spend by category (this month)</h2>
+              <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+                <div>
+                  <div className="mb-3 font-mono text-[10.5px] uppercase tracking-[0.1em] text-sub">
+                    Spend by category, this month
+                  </div>
                   {data.spend_by_category.length === 0 ? (
-                    <div className="mt-6 text-center text-sm text-slate-500">No expenses recorded this month yet.</div>
+                    <EmptyState title="No expenses yet" subtitle="Nothing recorded this month yet." />
                   ) : (
-                    <div className="h-64">
+                    <div className="h-64 border border-rule p-4">
                       <ResponsiveContainer width="100%" height="100%">
                         <PieChart>
                           <Pie
@@ -67,42 +71,41 @@ export default function Dashboard() {
                           </Pie>
                           <Tooltip
                             formatter={(value) => formatCurrency(value)}
-                            contentStyle={{ background: "#0f172a", border: "1px solid #1e293b", borderRadius: 8 }}
+                            contentStyle={{ background: "#fbfaf6", border: "1px solid #181510", borderRadius: 0 }}
                           />
                           <Legend />
                         </PieChart>
                       </ResponsiveContainer>
                     </div>
                   )}
-                </Card>
+                </div>
 
-                <Card>
-                  <h2 className="font-semibold">Recent transactions</h2>
+                <div>
+                  <div className="mb-3 font-mono text-[10.5px] uppercase tracking-[0.1em] text-sub">
+                    Recent transactions
+                  </div>
                   {data.recent_transactions.length === 0 ? (
-                    <div className="mt-6 text-center text-sm text-slate-500">No transactions yet.</div>
+                    <EmptyState title="No transactions yet" />
                   ) : (
-                    <ul className="mt-3 divide-y divide-slate-800">
+                    <div>
                       {data.recent_transactions.map((t) => (
-                        <li key={t.id} className="flex items-center justify-between py-3 text-sm">
-                          <div>
-                            <div className="font-medium">{t.description || "—"}</div>
-                            <div className="text-xs text-slate-500">{formatDate(t.date)}</div>
-                          </div>
-                          <div className={t.kind === "income" ? "text-emerald-400" : "text-rose-400"}>
-                            {t.kind === "income" ? "+" : "-"}
-                            {formatCurrency(t.amount)}
-                          </div>
-                        </li>
+                        <LedgerRow
+                          key={t.id}
+                          name={t.description || "Untitled"}
+                          meta={formatDate(t.date)}
+                          amount={`${t.kind === "income" ? "+" : "-"}${formatCurrency(t.amount)}`}
+                          tone={t.kind === "income" ? "up" : "down"}
+                        />
                       ))}
-                    </ul>
+                    </div>
                   )}
-                </Card>
+                </div>
               </div>
 
-              <Card>
-                <div className="mb-1 flex items-center gap-2 font-semibold">
-                  <CalendarClock size={18} className="text-slate-400" />
-                  Upcoming bills (next 14 days)
+              <div>
+                <div className="mb-3 flex items-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.1em] text-sub">
+                  <CalendarClock size={14} />
+                  Upcoming bills, next 14 days
                 </div>
                 {data.upcoming_bills.length === 0 ? (
                   <EmptyState
@@ -111,19 +114,18 @@ export default function Dashboard() {
                     subtitle="Recurring bills detected on the Subscriptions page will show up here as they approach."
                   />
                 ) : (
-                  <ul className="mt-3 divide-y divide-slate-800">
+                  <div>
                     {data.upcoming_bills.map((b) => (
-                      <li key={b.id} className="flex items-center justify-between py-3 text-sm">
-                        <div className="font-medium">{b.name}</div>
-                        <div className="flex items-center gap-4 text-slate-400">
-                          <span>{formatDate(b.next_due_date)}</span>
-                          <span className="font-semibold text-slate-100">{formatCurrency(b.amount)}</span>
-                        </div>
-                      </li>
+                      <LedgerRow
+                        key={b.id}
+                        name={b.name}
+                        meta={formatDate(b.next_due_date)}
+                        amount={formatCurrency(b.amount)}
+                      />
                     ))}
-                  </ul>
+                  </div>
                 )}
-              </Card>
+              </div>
             </>
           )
         )}

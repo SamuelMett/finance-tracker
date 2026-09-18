@@ -29,12 +29,12 @@ const POINTS = [
 
 export default function Security() {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
+    <div className="min-h-screen bg-paper text-ink">
       <PublicNav />
 
       <section className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 sm:py-20">
-        <h1 className="text-4xl font-semibold">How Runway handles your data</h1>
-        <p className="mt-4 text-lg text-slate-400">
+        <h1 className="font-serif text-4xl">How Runway handles your data</h1>
+        <p className="mt-4 font-mono text-xs text-sub">
           It's your financial history. Here's exactly how it's protected, in plain language.
         </p>
       </section>
@@ -42,12 +42,10 @@ export default function Security() {
       <section className="mx-auto max-w-3xl space-y-5 px-4 pb-16 sm:px-6">
         {POINTS.map((p) => (
           <Card key={p.title} className="flex items-start gap-4">
-            <div className="shrink-0 rounded-xl bg-emerald-500/10 p-2.5 text-emerald-400">
-              <p.icon size={20} strokeWidth={2} />
-            </div>
+            <p.icon size={20} strokeWidth={1.75} className="mt-0.5 shrink-0 text-ink" />
             <div>
-              <div className="font-semibold">{p.title}</div>
-              <p className="mt-1.5 text-sm text-slate-400">{p.desc}</p>
+              <div className="font-serif text-lg">{p.title}</div>
+              <p className="mt-1.5 text-sm leading-relaxed text-sub">{p.desc}</p>
             </div>
           </Card>
         ))}
@@ -55,8 +53,8 @@ export default function Security() {
 
       <section className="mx-auto max-w-3xl px-4 pb-16 sm:px-6">
         <Card>
-          <div className="font-semibold">Being upfront</div>
-          <p className="mt-2 text-sm text-slate-400">
+          <div className="font-serif text-lg">Being upfront</div>
+          <p className="mt-2 text-sm leading-relaxed text-sub">
             Runway is a small, independently built project. There's no dedicated security team or paid audit behind
             it yet. What you get instead is honesty about what's actually implemented, listed above, and no data
             sold to advertisers or data brokers, ever.
@@ -66,8 +64,8 @@ export default function Security() {
 
       <section className="mx-auto max-w-3xl px-4 pb-24 text-center sm:px-6">
         <Link to="/register" className="inline-block">
-          <Button className="!px-6 !py-3 text-base">
-            Create your account <ArrowRight size={18} />
+          <Button className="!px-6 !py-3 text-sm">
+            Create your account <ArrowRight size={16} />
           </Button>
         </Link>
       </section>
