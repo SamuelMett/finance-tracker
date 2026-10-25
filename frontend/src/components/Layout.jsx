@@ -9,9 +9,9 @@ import {
   TrendingUp,
   Settings as SettingsIcon,
   LogOut,
-  Landmark,
 } from "lucide-react";
 import { setAuthToken } from "../api/client";
+import RunwayMark from "./RunwayMark";
 
 const links = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -66,7 +66,7 @@ export default function Layout({ children }) {
       <aside className="fixed inset-y-0 left-0 hidden w-64 flex-col border-r border-slate-800 bg-slate-900/40 p-4 md:flex">
         <div className="mb-6 flex items-center gap-2 px-2 py-2">
           <div className="rounded-lg bg-emerald-500/10 p-1.5 text-emerald-400">
-            <Landmark size={20} strokeWidth={2} />
+            <RunwayMark size={20} />
           </div>
           <span className="text-lg font-semibold">Runway</span>
         </div>
@@ -89,7 +89,7 @@ export default function Layout({ children }) {
       <header className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-800 bg-slate-950/95 px-4 py-3 backdrop-blur md:hidden">
         <div className="flex items-center gap-2">
           <div className="rounded-lg bg-emerald-500/10 p-1.5 text-emerald-400">
-            <Landmark size={18} strokeWidth={2} />
+            <RunwayMark size={18} />
           </div>
           <span className="font-semibold">Runway</span>
         </div>

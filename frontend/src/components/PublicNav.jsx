@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { Landmark, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Button } from "./ui";
+import RunwayMark from "./RunwayMark";
 
 const LINKS = [
   { to: "/", label: "Home", end: true },
@@ -19,7 +20,7 @@ export default function PublicNav() {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
         <Link to="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
           <div className="rounded-lg bg-emerald-500/10 p-1.5 text-emerald-400">
-            <Landmark size={20} strokeWidth={2} />
+            <RunwayMark size={20} />
           </div>
           <span className="text-lg font-semibold">Runway</span>
         </Link>
