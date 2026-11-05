@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { api, setAuthToken } from "../api/client";
 import RunwayMark from "../components/RunwayMark";
 import { inputClass } from "../components/ui";
+import { Stagger, Item, Notice } from "../components/motion";
 
 function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
@@ -58,21 +59,28 @@ export default function Login() {
 
   return (
     <div className="min-h-screen w-full bg-paper px-4 text-ink">
-      <div className="mx-auto flex min-h-screen w-full max-w-sm flex-col justify-center py-10">
-        <Link to="/" className="mb-8 inline-flex w-fit items-center gap-1.5 font-mono text-xs uppercase tracking-[0.08em] text-sub hover:text-ink">
-          <ArrowLeft size={14} />
-          Back to home
-        </Link>
+      <Stagger gap={0.07} className="mx-auto flex min-h-screen w-full max-w-sm flex-col justify-center py-10">
+        <Item>
+          <Link
+            to="/"
+            className="mb-8 inline-flex w-fit items-center gap-1.5 font-mono text-xs uppercase tracking-[0.08em] text-sub hover:text-ink"
+          >
+            <ArrowLeft size={14} />
+            Back to home
+          </Link>
+        </Item>
 
-        <Link to="/" className="mb-1 inline-flex items-center gap-2">
-          <RunwayMark size={24} />
-          <span className="font-serif text-2xl">Runway</span>
-        </Link>
-        <div className="mb-8 font-mono text-xs text-sub">Sign in to manage your money.</div>
+        <Item>
+          <Link to="/" className="mb-1 inline-flex items-center gap-2">
+            <RunwayMark size={24} />
+            <span className="font-serif text-2xl">Runway</span>
+          </Link>
+        </Item>
+        <Item className="mb-8 font-mono text-xs text-sub">Sign in to manage your money.</Item>
 
-        {error && <div className="mb-5 border border-neg/40 px-3 py-2 font-mono text-xs text-neg">{error}</div>}
+        {error && <Notice className="mb-5">{error}</Notice>}
 
-        <form onSubmit={onSubmit} className="space-y-6">
+        <Item as="form" onSubmit={onSubmit} className="space-y-6">
           <div>
             <label className="font-mono text-[10.5px] uppercase tracking-[0.08em] text-sub">Email</label>
             <input
@@ -107,15 +115,15 @@ export default function Login() {
           >
             {loading ? "Signing in..." : "Sign in"}
           </button>
-        </form>
+        </Item>
 
-        <p className="mt-6 font-mono text-xs text-sub">
+        <Item as="p" className="mt-6 font-mono text-xs text-sub">
           No account?{" "}
           <Link className="text-ink underline hover:no-underline" to="/register">
             Register
           </Link>
-        </p>
-      </div>
+        </Item>
+      </Stagger>
     </div>
   );
 }

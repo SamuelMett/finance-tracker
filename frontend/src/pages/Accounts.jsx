@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import Layout from "../components/Layout";
 import { api } from "../api/client";
 import { formatCurrency } from "../lib/format";
-import { EmptyState, LedgerRow, inputClass, selectClass } from "../components/ui";
+import { EmptyState, LedgerRow, inputClass, selectClass, submitClass } from "../components/ui";
+import { PageHeader, Stagger, Notice } from "../components/motion";
 
 const TYPES = [
   { value: "checking", label: "Checking" },
@@ -68,64 +68,57 @@ export default function Accounts() {
   }
 
   return (
-    <Layout>
-      <div className="space-y-8">
-        <div className="border-b border-ink pb-3">
-          <h1 className="font-serif text-2xl">Accounts</h1>
-          <p className="mt-1 font-mono text-xs text-sub">Track balances across your bank, cash, and card accounts.</p>
-        </div>
+    <div className="space-y-8">
+      <PageHeader title="Accounts" subtitle="Track balances across your bank, cash, and card accounts." />
 
-        {error && <div className="border border-neg/40 px-3 py-2 font-mono text-xs text-neg">{error}</div>}
+      {error && <Notice>{error}</Notice>}
 
-        <form onSubmit={onSubmit} className="border border-rule p-4">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
-            <input
-              className={`${inputClass} sm:col-span-2`}
-              placeholder="Account name (e.g. Chase Checking)"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-            <select className={selectClass} value={type} onChange={(e) => setType(e.target.value)}>
-              {TYPES.map((t) => (
-                <option key={t.value} value={t.value}>
-                  {t.label}
-                </option>
-              ))}
-            </select>
-            <input
-              className={inputClass}
-              placeholder="Starting balance"
-              type="number"
-              step="0.01"
-              value={startingBalance}
-              onChange={(e) => setStartingBalance(e.target.value)}
-            />
-          </div>
-          <button className="mt-4 border border-ink bg-ink px-4 py-2 font-mono text-xs uppercase tracking-[0.08em] text-paper transition hover:bg-transparent hover:text-ink">
-            Add account
-          </button>
-        </form>
-
-        {loading ? (
-          <div className="font-mono text-xs text-sub">Loading...</div>
-        ) : accounts.length === 0 ? (
-          <EmptyState title="No accounts yet" subtitle="Add one above." />
-        ) : (
-          <div>
-            {accounts.map((a) => (
-              <LedgerRow
-                key={a.id}
-                name={a.name}
-                meta={TYPES.find((t) => t.value === a.type)?.label || a.type}
-                amount={formatCurrency(a.balance)}
-                tone={a.balance < 0 ? "down" : "default"}
-                onDelete={() => remove(a.id)}
-              />
+      <form onSubmit={onSubmit} className="border border-rule p-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
+          <input
+            className={`${inputClass} sm:col-span-2`}
+            placeholder="Account name (e.g. Chase Checking)"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+          <select className={selectClass} value={type} onChange={(e) => setType(e.target.value)}>
+            {TYPES.map((t) => (
+              <option key={t.value} value={t.value}>
+                {t.label}
+              </option>
             ))}
-          </div>
-        )}
-      </div>
-    </Layout>
+          </select>
+          <input
+            className={inputClass}
+            placeholder="Starting balance"
+            type="number"
+            step="0.01"
+            value={startingBalance}
+            onChange={(e) => setStartingBalance(e.target.value)}
+          />
+        </div>
+        <button className={`mt-4 ${submitClass}`}>Add account</button>
+      </form>
+
+      {loading ? (
+        <div className="font-mono text-xs text-sub">Loading...</div>
+      ) : accounts.length === 0 ? (
+        <EmptyState title="No accounts yet" subtitle="Add one above." />
+      ) : (
+        <Stagger count={accounts.length}>
+          {accounts.map((a) => (
+            <LedgerRow
+              key={a.id}
+              name={a.name}
+              meta={TYPES.find((t) => t.value === a.type)?.label || a.type}
+              amount={formatCurrency(a.balance)}
+              tone={a.balance < 0 ? "down" : "default"}
+              onDelete={() => remove(a.id)}
+            />
+          ))}
+        </Stagger>
+      )}
+    </div>
   );
 }

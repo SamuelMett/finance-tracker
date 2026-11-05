@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
 import { Wallet, CreditCard, Repeat, PieChart, TrendingUp, ArrowRight } from "lucide-react";
-import PublicNav from "../components/PublicNav";
-import PublicFooter from "../components/PublicFooter";
 import { Card, Button } from "../components/ui";
+import { Stagger, Item, Reveal } from "../components/motion";
 
 const SECTIONS = [
   {
@@ -59,42 +58,44 @@ const SECTIONS = [
 
 export default function Features() {
   return (
-    <div className="min-h-screen bg-paper text-ink">
-      <PublicNav />
-
-      <section className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 sm:py-20">
-        <h1 className="font-serif text-4xl">Everything Runway does</h1>
-        <p className="mt-4 font-mono text-xs text-sub">
+    <>
+      <Stagger as="section" gap={0.12} className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 sm:py-20">
+        <Item as="h1" className="font-serif text-4xl">
+          Everything Runway does
+        </Item>
+        <Item as="p" className="mt-4 font-mono text-xs text-sub">
           A focused set of tools for understanding your money, not a hundred features you'll never open.
-        </p>
-      </section>
+        </Item>
+      </Stagger>
 
       <section className="mx-auto max-w-4xl space-y-6 px-4 pb-20 sm:px-6">
         {SECTIONS.map((s, i) => (
-          <Card key={s.title} className="sm:p-7">
-            <div className="flex items-start gap-5">
-              <span className="mt-1 font-mono text-xs text-sub">{String(i + 1).padStart(2, "0")}</span>
-              <div className="flex-1">
-                <div className="flex flex-wrap items-center gap-2">
-                  <s.icon size={18} strokeWidth={1.75} className="text-ink" />
-                  <h2 className="font-serif text-xl">{s.title}</h2>
+          <Reveal key={s.title}>
+            <Card className="sm:p-7">
+              <div className="flex items-start gap-5">
+                <span className="mt-1 font-mono text-xs text-sub">{String(i + 1).padStart(2, "0")}</span>
+                <div className="flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <s.icon size={18} strokeWidth={1.75} className="text-ink" />
+                    <h2 className="font-serif text-xl">{s.title}</h2>
+                  </div>
+                  <p className="mt-2 text-sm leading-relaxed text-sub">{s.desc}</p>
+                  <ul className="mt-4 space-y-1.5">
+                    {s.points.map((point) => (
+                      <li key={point} className="flex gap-2 text-sm text-sub">
+                        <span className="mt-2 h-1 w-1 shrink-0 bg-ink" />
+                        {point}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <p className="mt-2 text-sm leading-relaxed text-sub">{s.desc}</p>
-                <ul className="mt-4 space-y-1.5">
-                  {s.points.map((point) => (
-                    <li key={point} className="flex gap-2 text-sm text-sub">
-                      <span className="mt-2 h-1 w-1 shrink-0 bg-ink" />
-                      {point}
-                    </li>
-                  ))}
-                </ul>
               </div>
-            </div>
-          </Card>
+            </Card>
+          </Reveal>
         ))}
       </section>
 
-      <section className="mx-auto max-w-3xl px-4 pb-24 text-center sm:px-6">
+      <Reveal as="section" className="mx-auto max-w-3xl px-4 pb-24 text-center sm:px-6">
         <h2 className="font-serif text-2xl">Ready to try it?</h2>
         <p className="mt-2 font-mono text-xs text-sub">Setting up your first account takes about two minutes.</p>
         <Link to="/register" className="mt-6 inline-block">
@@ -102,9 +103,7 @@ export default function Features() {
             Get started free <ArrowRight size={16} />
           </Button>
         </Link>
-      </section>
-
-      <PublicFooter />
-    </div>
+      </Reveal>
+    </>
   );
 }

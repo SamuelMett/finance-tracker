@@ -5,3 +5,17 @@
 body {
   margin: 0;
 }
+
+::selection {
+  background: #181510;
+  color: #fbfaf6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

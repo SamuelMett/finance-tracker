@@ -15,83 +15,39 @@ import Debts from "./pages/Debts";
 import Subscriptions from "./pages/Subscriptions";
 import Settings from "./pages/Settings";
 import ProtectedRoute from "./components/ProtectedRoute";
+import PublicShell from "./components/PublicShell";
+import AppShell from "./components/AppShell";
 
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/features" element={<Features />} />
-      <Route path="/security" element={<Security />} />
-      <Route path="/about" element={<About />} />
+      <Route element={<PublicShell />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/features" element={<Features />} />
+        <Route path="/security" element={<Security />} />
+        <Route path="/about" element={<About />} />
+      </Route>
 
       <Route path="/login" element={<Login />} />
       <Route path="/login/2fa" element={<TwoFactorLogin />} />
       <Route path="/register" element={<Register />} />
 
       <Route
-        path="/dashboard"
         element={
           <ProtectedRoute>
-            <Dashboard />
+            <AppShell />
           </ProtectedRoute>
         }
-      />
-      <Route
-        path="/forecast"
-        element={
-          <ProtectedRoute>
-            <Forecast />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/transactions"
-        element={
-          <ProtectedRoute>
-            <Transactions />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/accounts"
-        element={
-          <ProtectedRoute>
-            <Accounts />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/categories"
-        element={
-          <ProtectedRoute>
-            <Categories />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/debts"
-        element={
-          <ProtectedRoute>
-            <Debts />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/subscriptions"
-        element={
-          <ProtectedRoute>
-            <Subscriptions />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/settings"
-        element={
-          <ProtectedRoute>
-            <Settings />
-          </ProtectedRoute>
-        }
-      />
+      >
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/forecast" element={<Forecast />} />
+        <Route path="/transactions" element={<Transactions />} />
+        <Route path="/accounts" element={<Accounts />} />
+        <Route path="/categories" element={<Categories />} />
+        <Route path="/debts" element={<Debts />} />
+        <Route path="/subscriptions" element={<Subscriptions />} />
+        <Route path="/settings" element={<Settings />} />
+      </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
