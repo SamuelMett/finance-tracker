@@ -1,9 +1,19 @@
 import { useEffect, useState } from "react";
 import { Repeat, Sparkles } from "lucide-react";
-import Layout from "../components/Layout";
 import { api } from "../api/client";
 import { formatCurrency, formatDate } from "../lib/format";
-import { StatCard, Badge, EmptyState, Button, LedgerRow, inputClass, selectClass } from "../components/ui";
+import {
+  StatRow,
+  StatCard,
+  Badge,
+  EmptyState,
+  Button,
+  LedgerRow,
+  inputClass,
+  selectClass,
+  submitClass,
+} from "../components/ui";
+import { PageHeader, Stagger, Reveal, Notice } from "../components/motion";
 
 const FREQUENCIES = [
   { value: "weekly", label: "Weekly", multiplier: 4.345 },
@@ -105,131 +115,129 @@ export default function Subscriptions() {
   const monthlyTotal = active.reduce((sum, i) => sum + monthlyEquivalent(i), 0);
 
   return (
-    <Layout>
-      <div className="space-y-8">
-        <div className="flex flex-wrap items-start justify-between gap-4 border-b border-ink pb-3">
-          <div>
-            <h1 className="font-serif text-2xl">Subscriptions &amp; bills</h1>
-            <p className="mt-1 font-mono text-xs text-sub">Recurring charges, detected automatically from your transactions.</p>
-          </div>
-          <Button onClick={scan} disabled={scanning}>
-            <Sparkles size={14} />
-            {scanning ? "Scanning" : "Scan transactions"}
-          </Button>
-        </div>
+    <div className="space-y-8">
+      <PageHeader
+        title="Subscriptions &amp; bills"
+        subtitle="Recurring charges, detected automatically from your transactions."
+      >
+        <Button onClick={scan} disabled={scanning}>
+          <Sparkles size={14} />
+          {scanning ? "Scanning" : "Scan transactions"}
+        </Button>
+      </PageHeader>
 
-        {error && <div className="border border-neg/40 px-3 py-2 font-mono text-xs text-neg">{error}</div>}
-        {scanResult && (
-          <div className="border border-pos/40 px-3 py-2 font-mono text-xs text-pos">
-            Scan complete. Found {scanResult.created} new recurring charge{scanResult.created === 1 ? "" : "s"}, updated{" "}
-            {scanResult.updated}.
-          </div>
-        )}
+      {error && <Notice>{error}</Notice>}
+      {scanResult && (
+        <Notice tone="pos">
+          Scan complete. Found {scanResult.created} new recurring charge{scanResult.created === 1 ? "" : "s"}, updated{" "}
+          {scanResult.updated}.
+        </Notice>
+      )}
 
-        {active.length > 0 && (
+      {active.length > 0 && (
+        <StatRow>
           <StatCard
             label="Recurring spend"
-            value={`${formatCurrency(monthlyTotal)} / mo`}
+            amount={monthlyTotal}
+            fmt={(v) => `${formatCurrency(v)} / mo`}
             sub={`${active.length} active subscription${active.length === 1 ? "" : "s"}`}
             tone="down"
           />
-        )}
+        </StatRow>
+      )}
 
-        <form onSubmit={onSubmit} className="border border-rule p-4">
-          <div className="mb-3 font-mono text-[10.5px] uppercase tracking-[0.1em] text-sub">Add manually</div>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-5">
-            <input
-              className={`${inputClass} sm:col-span-2`}
-              placeholder="Name (e.g. Spotify)"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-            <input
-              className={inputClass}
-              placeholder="Amount"
-              type="number"
-              step="0.01"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              required
-            />
-            <select className={selectClass} value={frequency} onChange={(e) => setFrequency(e.target.value)}>
-              {FREQUENCIES.map((f) => (
-                <option key={f.value} value={f.value}>
-                  {f.label}
-                </option>
-              ))}
-            </select>
-            <input className={inputClass} type="date" value={nextDue} onChange={(e) => setNextDue(e.target.value)} />
-          </div>
-          <button className="mt-4 border border-ink bg-ink px-4 py-2 font-mono text-xs uppercase tracking-[0.08em] text-paper transition hover:bg-transparent hover:text-ink">
-            Add subscription
-          </button>
-        </form>
-
-        {loading ? (
-          <div className="font-mono text-xs text-sub">Loading...</div>
-        ) : active.length === 0 && cancelled.length === 0 ? (
-          <EmptyState
-            icon={Repeat}
-            title="No subscriptions found yet"
-            subtitle="Log a few months of transactions, then hit Scan to auto-detect recurring charges."
+      <form onSubmit={onSubmit} className="border border-rule p-4">
+        <div className="mb-3 font-mono text-[10.5px] uppercase tracking-[0.1em] text-sub">Add manually</div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-5">
+          <input
+            className={`${inputClass} sm:col-span-2`}
+            placeholder="Name (e.g. Spotify)"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
           />
-        ) : (
-          <div>
-            {active.map((item) => (
-              <LedgerRow
-                key={item.id}
-                name={
-                  <span className="inline-flex items-center gap-2">
-                    {item.name}
-                    {item.source === "detected" && <Badge tone="violet">detected</Badge>}
-                  </span>
-                }
-                meta={`${FREQUENCIES.find((f) => f.value === item.frequency)?.label || item.frequency}${
-                  item.next_due_date ? ` · due ${formatDate(item.next_due_date)}` : ""
-                }`}
-                amount={`${formatCurrency(item.amount)} (${formatCurrency(monthlyEquivalent(item))}/mo)`}
-                tone="down"
-                right={
-                  <div className="flex gap-3 font-mono text-[10px] text-sub">
-                    <button onClick={() => setStatus(item.id, "cancelled")} className="hover:text-ink">
-                      cancel
-                    </button>
-                    <button onClick={() => remove(item.id)} className="hover:text-neg">
-                      del
-                    </button>
-                  </div>
-                }
-              />
+          <input
+            className={inputClass}
+            placeholder="Amount"
+            type="number"
+            step="0.01"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            required
+          />
+          <select className={selectClass} value={frequency} onChange={(e) => setFrequency(e.target.value)}>
+            {FREQUENCIES.map((f) => (
+              <option key={f.value} value={f.value}>
+                {f.label}
+              </option>
             ))}
+          </select>
+          <input className={inputClass} type="date" value={nextDue} onChange={(e) => setNextDue(e.target.value)} />
+        </div>
+        <button className={`mt-4 ${submitClass}`}>Add subscription</button>
+      </form>
 
-            {cancelled.length > 0 && (
-              <div className="mt-6">
-                <div className="mb-2 font-mono text-[10.5px] uppercase tracking-[0.08em] text-sub">Cancelled</div>
-                {cancelled.map((item) => (
-                  <LedgerRow
-                    key={item.id}
-                    name={<span className="text-sub line-through">{item.name}</span>}
-                    amount={formatCurrency(item.amount)}
-                    right={
-                      <div className="flex gap-3 font-mono text-[10px] text-sub">
-                        <button onClick={() => setStatus(item.id, "active")} className="hover:text-ink">
-                          reactivate
-                        </button>
-                        <button onClick={() => remove(item.id)} className="hover:text-neg">
-                          del
-                        </button>
-                      </div>
-                    }
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-    </Layout>
+      {loading ? (
+        <div className="font-mono text-xs text-sub">Loading...</div>
+      ) : active.length === 0 && cancelled.length === 0 ? (
+        <EmptyState
+          icon={Repeat}
+          title="No subscriptions found yet"
+          subtitle="Log a few months of transactions, then hit Scan to auto-detect recurring charges."
+        />
+      ) : (
+        <Stagger count={active.length}>
+          {active.map((item) => (
+            <LedgerRow
+              key={item.id}
+              name={
+                <span className="inline-flex items-center gap-2">
+                  {item.name}
+                  {item.source === "detected" && <Badge tone="violet">detected</Badge>}
+                </span>
+              }
+              meta={`${FREQUENCIES.find((f) => f.value === item.frequency)?.label || item.frequency}${
+                item.next_due_date ? ` · due ${formatDate(item.next_due_date)}` : ""
+              }`}
+              amount={`${formatCurrency(item.amount)} (${formatCurrency(monthlyEquivalent(item))}/mo)`}
+              tone="down"
+              right={
+                <div className="flex gap-3 font-mono text-[10px] text-sub">
+                  <button onClick={() => setStatus(item.id, "cancelled")} className="hover:text-ink">
+                    cancel
+                  </button>
+                  <button onClick={() => remove(item.id)} className="hover:text-neg">
+                    del
+                  </button>
+                </div>
+              }
+            />
+          ))}
+
+          {cancelled.length > 0 && (
+            <Reveal className="mt-6">
+              <div className="mb-2 font-mono text-[10.5px] uppercase tracking-[0.08em] text-sub">Cancelled</div>
+              {cancelled.map((item) => (
+                <LedgerRow
+                  key={item.id}
+                  name={<span className="text-sub line-through">{item.name}</span>}
+                  amount={formatCurrency(item.amount)}
+                  right={
+                    <div className="flex gap-3 font-mono text-[10px] text-sub">
+                      <button onClick={() => setStatus(item.id, "active")} className="hover:text-ink">
+                        reactivate
+                      </button>
+                      <button onClick={() => remove(item.id)} className="hover:text-neg">
+                        del
+                      </button>
+                    </div>
+                  }
+                />
+              ))}
+            </Reveal>
+          )}
+        </Stagger>
+      )}
+    </div>
   );
 }

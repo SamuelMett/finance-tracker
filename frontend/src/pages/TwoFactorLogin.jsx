@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { api, setAuthToken } from "../api/client";
+import { Stagger, Item, Notice } from "../components/motion";
 
 export default function TwoFactorLogin() {
   const nav = useNavigate();
@@ -46,19 +47,30 @@ export default function TwoFactorLogin() {
 
   return (
     <div className="min-h-screen w-full bg-paper px-4 text-ink">
-      <div className="mx-auto flex min-h-screen w-full max-w-sm flex-col justify-center py-10">
-        <Link to="/login" className="mb-8 inline-flex w-fit items-center gap-1.5 font-mono text-xs uppercase tracking-[0.08em] text-sub hover:text-ink">
-          <ArrowLeft size={14} />
-          Back to login
-        </Link>
+      <Stagger gap={0.07} className="mx-auto flex min-h-screen w-full max-w-sm flex-col justify-center py-10">
+        <Item>
+          <Link
+            to="/login"
+            className="mb-8 inline-flex w-fit items-center gap-1.5 font-mono text-xs uppercase tracking-[0.08em] text-sub hover:text-ink"
+          >
+            <ArrowLeft size={14} />
+            Back to login
+          </Link>
+        </Item>
 
-        <h1 className="font-serif text-2xl">Two-factor code</h1>
-        <p className="mt-1 font-mono text-xs text-sub">Enter the 6-digit code from your authenticator app.</p>
-        <p className="mt-3 font-mono text-[11px] text-sub">Account: {email}</p>
+        <Item as="h1" className="font-serif text-2xl">
+          Two-factor code
+        </Item>
+        <Item as="p" className="mt-1 font-mono text-xs text-sub">
+          Enter the 6-digit code from your authenticator app.
+        </Item>
+        <Item as="p" className="mt-3 font-mono text-[11px] text-sub">
+          Account: {email}
+        </Item>
 
-        {error && <div className="mt-5 border border-neg/40 px-3 py-2 font-mono text-xs text-neg">{error}</div>}
+        {error && <Notice className="mt-5">{error}</Notice>}
 
-        <form onSubmit={onSubmit} className="mt-6 space-y-6">
+        <Item as="form" onSubmit={onSubmit} className="mt-6 space-y-6">
           <input
             value={otp}
             onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
@@ -74,8 +86,8 @@ export default function TwoFactorLogin() {
           >
             {loading ? "Verifying..." : "Verify and continue"}
           </button>
-        </form>
-      </div>
+        </Item>
+      </Stagger>
     </div>
   );
 }

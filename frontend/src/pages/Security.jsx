@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
 import { ShieldCheck, KeyRound, QrCode, Ban, ArrowRight } from "lucide-react";
-import PublicNav from "../components/PublicNav";
-import PublicFooter from "../components/PublicFooter";
 import { Card, Button } from "../components/ui";
+import { Stagger, Item, Reveal } from "../components/motion";
 
 const POINTS = [
   {
@@ -29,48 +28,48 @@ const POINTS = [
 
 export default function Security() {
   return (
-    <div className="min-h-screen bg-paper text-ink">
-      <PublicNav />
-
-      <section className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 sm:py-20">
-        <h1 className="font-serif text-4xl">How Runway handles your data</h1>
-        <p className="mt-4 font-mono text-xs text-sub">
+    <>
+      <Stagger as="section" gap={0.12} className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 sm:py-20">
+        <Item as="h1" className="font-serif text-4xl">
+          How Runway handles your data
+        </Item>
+        <Item as="p" className="mt-4 font-mono text-xs text-sub">
           It's your financial history. Here's exactly how it's protected, in plain language.
-        </p>
-      </section>
+        </Item>
+      </Stagger>
 
       <section className="mx-auto max-w-3xl space-y-5 px-4 pb-16 sm:px-6">
         {POINTS.map((p) => (
-          <Card key={p.title} className="flex items-start gap-4">
-            <p.icon size={20} strokeWidth={1.75} className="mt-0.5 shrink-0 text-ink" />
-            <div>
-              <div className="font-serif text-lg">{p.title}</div>
-              <p className="mt-1.5 text-sm leading-relaxed text-sub">{p.desc}</p>
-            </div>
-          </Card>
+          <Reveal key={p.title}>
+            <Card className="flex items-start gap-4">
+              <p.icon size={20} strokeWidth={1.75} className="mt-0.5 shrink-0 text-ink" />
+              <div>
+                <div className="font-serif text-lg">{p.title}</div>
+                <p className="mt-1.5 text-sm leading-relaxed text-sub">{p.desc}</p>
+              </div>
+            </Card>
+          </Reveal>
         ))}
       </section>
 
-      <section className="mx-auto max-w-3xl px-4 pb-16 sm:px-6">
+      <Reveal as="section" className="mx-auto max-w-3xl px-4 pb-16 sm:px-6">
         <Card>
           <div className="font-serif text-lg">Being upfront</div>
           <p className="mt-2 text-sm leading-relaxed text-sub">
-            Runway is a small, independently built project. There's no dedicated security team or paid audit behind
-            it yet. What you get instead is honesty about what's actually implemented, listed above, and no data
-            sold to advertisers or data brokers, ever.
+            Runway is a small, independently built project. There's no dedicated security team or paid audit behind it
+            yet. What you get instead is honesty about what's actually implemented, listed above, and no data sold to
+            advertisers or data brokers, ever.
           </p>
         </Card>
-      </section>
+      </Reveal>
 
-      <section className="mx-auto max-w-3xl px-4 pb-24 text-center sm:px-6">
+      <Reveal as="section" className="mx-auto max-w-3xl px-4 pb-24 text-center sm:px-6">
         <Link to="/register" className="inline-block">
           <Button className="!px-6 !py-3 text-sm">
             Create your account <ArrowRight size={16} />
           </Button>
         </Link>
-      </section>
-
-      <PublicFooter />
-    </div>
+      </Reveal>
+    </>
   );
 }
