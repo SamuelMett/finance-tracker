@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ShieldCheck, KeyRound, QrCode, Ban, ArrowRight } from "lucide-react";
+import { ShieldCheck, KeyRound, QrCode, Ban, ArrowRight, Lock, Gauge } from "lucide-react";
 import { Card, Button } from "../components/ui";
 import { Stagger, Item, Reveal } from "../components/motion";
 
@@ -12,7 +12,7 @@ const POINTS = [
   {
     icon: QrCode,
     title: "Optional two-factor authentication",
-    desc: "Turn on 2FA in Settings and pair any standard authenticator app (Google Authenticator, Authy, 1Password) with a QR code. Logging in then requires your password plus a fresh 6-digit code.",
+    desc: "Turn on 2FA in Settings and pair any standard authenticator app with a QR code. Logging in then requires your password plus a fresh 6-digit code, and each code works only once. Turning 2FA off needs your password and a live code too.",
   },
   {
     icon: Ban,
@@ -21,8 +21,18 @@ const POINTS = [
   },
   {
     icon: ShieldCheck,
-    title: "Session tokens, not stored passwords",
-    desc: "Once you log in, your browser holds a signed, expiring session token, not your password. Every request to your data is checked against that token.",
+    title: "Short sessions, not stored passwords",
+    desc: "Once you log in, your browser holds a signed session token that expires after 30 minutes, not your password. Every request to your data is checked against it, and you can only ever reach your own records.",
+  },
+  {
+    icon: Lock,
+    title: "Guessing is made pointless",
+    desc: "Five wrong passwords lock an account for 15 minutes. Wrong email and wrong password look identical and take the same time, so nobody can probe which emails are registered. Passwords need at least 10 characters and common ones are refused.",
+  },
+  {
+    icon: Gauge,
+    title: "Rate limits and strict input checks",
+    desc: "Every request is rate limited per address, oversized requests are rejected, and every field is checked for type and length on the server. Responses carry headers that block framing, sniffing and caching of your data.",
   },
 ];
 
@@ -30,10 +40,10 @@ export default function Security() {
   return (
     <>
       <Stagger as="section" gap={0.12} className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 sm:py-20">
-        <Item as="h1" className="font-serif text-4xl">
+        <Item as="h1" className="font-display text-4xl">
           How Runway handles your data
         </Item>
-        <Item as="p" className="mt-4 font-mono text-xs text-sub">
+        <Item as="p" className="mt-4 font-mono text-xs text-mute">
           It's your financial history. Here's exactly how it's protected, in plain language.
         </Item>
       </Stagger>
@@ -42,10 +52,10 @@ export default function Security() {
         {POINTS.map((p) => (
           <Reveal key={p.title}>
             <Card className="flex items-start gap-4">
-              <p.icon size={20} strokeWidth={1.75} className="mt-0.5 shrink-0 text-ink" />
+              <p.icon size={20} strokeWidth={1.75} className="mt-0.5 shrink-0 text-fg" />
               <div>
-                <div className="font-serif text-lg">{p.title}</div>
-                <p className="mt-1.5 text-sm leading-relaxed text-sub">{p.desc}</p>
+                <div className="font-display text-lg">{p.title}</div>
+                <p className="mt-1.5 text-sm leading-relaxed text-mute">{p.desc}</p>
               </div>
             </Card>
           </Reveal>
@@ -54,8 +64,8 @@ export default function Security() {
 
       <Reveal as="section" className="mx-auto max-w-3xl px-4 pb-16 sm:px-6">
         <Card>
-          <div className="font-serif text-lg">Being upfront</div>
-          <p className="mt-2 text-sm leading-relaxed text-sub">
+          <div className="font-display text-lg">Being upfront</div>
+          <p className="mt-2 text-sm leading-relaxed text-mute">
             Runway is a small, independently built project. There's no dedicated security team or paid audit behind it
             yet. What you get instead is honesty about what's actually implemented, listed above, and no data sold to
             advertisers or data brokers, ever.

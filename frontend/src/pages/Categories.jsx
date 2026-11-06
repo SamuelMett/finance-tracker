@@ -3,7 +3,7 @@ import { api } from "../api/client";
 import { EmptyState, inputClass, selectClass, submitClass } from "../components/ui";
 import { PageHeader, Stagger, Item, Notice } from "../components/motion";
 
-const COLORS = ["#8a5a20", "#3c5e3f", "#8a3324", "#2c4a6e", "#6b5730", "#5c4a6e", "#4a5a3c", "#7a3a4a"];
+const COLORS = ["#f0a561", "#7bcf9a", "#ee7b70", "#6ea8fe", "#c792ea", "#e5c07b", "#56b6c2", "#8c919a"];
 
 export default function Categories() {
   const [categories, setCategories] = useState([]);
@@ -61,7 +61,7 @@ export default function Categories() {
 
       {error && <Notice>{error}</Notice>}
 
-      <form onSubmit={onSubmit} className="border border-rule p-4">
+      <form onSubmit={onSubmit} className="border border-line p-4">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
           <input
             className={`${inputClass} sm:col-span-2`}
@@ -80,7 +80,7 @@ export default function Categories() {
                 type="button"
                 key={c}
                 onClick={() => setColor(c)}
-                className={`h-5 w-5 border ${color === c ? "border-ink" : "border-transparent"}`}
+                className={`h-5 w-5 rounded-[3px] border ${color === c ? "border-fg ring-1 ring-fg/30" : "border-transparent"}`}
                 style={{ backgroundColor: c }}
                 aria-label={c}
               />
@@ -91,19 +91,19 @@ export default function Categories() {
       </form>
 
       {loading ? (
-        <div className="font-mono text-xs text-sub">Loading...</div>
+        <div className="font-mono text-xs text-mute">Loading...</div>
       ) : categories.length === 0 ? (
         <EmptyState title="No categories yet" subtitle="Add one above." />
       ) : (
         <Stagger count={categories.length}>
           {categories.map((c) => (
-            <Item key={c.id} className="flex items-center justify-between border-b border-rule py-2.5 last:border-b-0">
+            <Item key={c.id} className="flex items-center justify-between border-b border-line py-2.5 last:border-b-0">
               <div className="flex items-center gap-3">
                 <span className="h-2.5 w-2.5 shrink-0" style={{ backgroundColor: c.color }} />
-                <span className="font-serif text-[15px]">{c.name}</span>
-                <span className="font-mono text-[10px] uppercase tracking-[0.06em] text-sub">{c.kind}</span>
+                <span className="font-display text-[15px]">{c.name}</span>
+                <span className="font-mono text-[10px] uppercase tracking-[0.06em] text-mute">{c.kind}</span>
               </div>
-              <button onClick={() => remove(c.id)} className="font-mono text-[10px] text-sub hover:text-neg">
+              <button onClick={() => remove(c.id)} className="font-mono text-[10px] text-mute hover:text-neg">
                 del
               </button>
             </Item>

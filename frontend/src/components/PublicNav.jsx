@@ -16,11 +16,11 @@ export default function PublicNav() {
   const loggedIn = !!localStorage.getItem("token");
 
   return (
-    <header className="sticky top-0 z-20 border-b border-rule bg-paper">
+    <header className="sticky top-0 z-20 border-b border-line bg-bg/70 backdrop-blur-xl">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6">
         <Link to="/" className="flex items-center gap-2.5" onClick={() => setOpen(false)}>
           <RunwayMark size={22} />
-          <span className="font-serif text-lg">Runway</span>
+          <span className="font-display text-lg">Runway</span>
         </Link>
 
         <nav className="hidden items-center gap-6 sm:flex">
@@ -30,7 +30,7 @@ export default function PublicNav() {
               to={l.to}
               end={l.end}
               className={({ isActive }) =>
-                `font-mono text-[11px] uppercase tracking-[0.08em] ${isActive ? "text-ink" : "text-sub hover:text-ink"}`
+                `font-mono text-[11px] uppercase tracking-[0.08em] ${isActive ? "text-fg" : "text-mute hover:text-fg"}`
               }
             >
               {l.label}
@@ -45,7 +45,7 @@ export default function PublicNav() {
             </Link>
           ) : (
             <>
-              <Link to="/login" className="font-mono text-[11px] uppercase tracking-[0.08em] text-sub hover:text-ink">
+              <Link to="/login" className="font-mono text-[11px] uppercase tracking-[0.08em] text-mute hover:text-fg">
                 Log in
               </Link>
               <Link to="/register">
@@ -55,13 +55,13 @@ export default function PublicNav() {
           )}
         </div>
 
-        <button onClick={() => setOpen((v) => !v)} className="p-1 text-ink sm:hidden" aria-label="Toggle menu">
+        <button onClick={() => setOpen((v) => !v)} className="p-1 text-fg sm:hidden" aria-label="Toggle menu">
           {open ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
       {open && (
-        <div className="border-t border-rule px-4 py-3 sm:hidden">
+        <div className="border-t border-line px-4 py-3 sm:hidden">
           <nav className="flex flex-col gap-3">
             {LINKS.map((l) => (
               <NavLink
@@ -70,14 +70,14 @@ export default function PublicNav() {
                 end={l.end}
                 onClick={() => setOpen(false)}
                 className={({ isActive }) =>
-                  `font-mono text-[11px] uppercase tracking-[0.08em] ${isActive ? "text-ink" : "text-sub"}`
+                  `font-mono text-[11px] uppercase tracking-[0.08em] ${isActive ? "text-fg" : "text-mute"}`
                 }
               >
                 {l.label}
               </NavLink>
             ))}
           </nav>
-          <div className="mt-4 flex flex-col gap-3 border-t border-rule pt-3">
+          <div className="mt-4 flex flex-col gap-3 border-t border-line pt-3">
             {loggedIn ? (
               <Link to="/dashboard" onClick={() => setOpen(false)}>
                 <Button className="w-full !py-2">Go to dashboard</Button>
@@ -87,7 +87,7 @@ export default function PublicNav() {
                 <Link
                   to="/login"
                   onClick={() => setOpen(false)}
-                  className="font-mono text-[11px] uppercase tracking-[0.08em] text-sub"
+                  className="font-mono text-[11px] uppercase tracking-[0.08em] text-mute"
                 >
                   Log in
                 </Link>

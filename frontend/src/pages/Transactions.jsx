@@ -103,7 +103,7 @@ export default function Transactions() {
       {accounts.length === 0 ? (
         <EmptyState title="No accounts yet" subtitle="Create an account first before logging transactions." />
       ) : (
-        <form onSubmit={onSubmit} className="border border-rule p-4">
+        <form onSubmit={onSubmit} className="border border-line p-4">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 lg:grid-cols-6">
             <select
               className={selectClass}
@@ -158,7 +158,7 @@ export default function Transactions() {
         </form>
       )}
 
-      <div className="flex flex-wrap gap-6 border-b border-rule pb-4">
+      <div className="flex flex-wrap gap-6 border-b border-line pb-4">
         <select className={selectClass} value={filterKind} onChange={(e) => setFilterKind(e.target.value)}>
           <option value="">All types</option>
           <option value="income">Income</option>
@@ -183,13 +183,13 @@ export default function Transactions() {
       </div>
 
       {loading ? (
-        <div className="font-mono text-xs text-sub">Loading...</div>
+        <div className="font-mono text-xs text-mute">Loading...</div>
       ) : visible.length === 0 ? (
         <EmptyState title="No transactions match" />
       ) : (
-        <table className="w-full border-t border-ink font-mono text-[13px]">
+        <table className="w-full border-t border-line-hi font-mono text-[13px]">
           <thead>
-            <tr className="border-b border-rule text-left text-[10px] uppercase tracking-[0.08em] text-sub">
+            <tr className="border-b border-line text-left text-[10px] uppercase tracking-[0.08em] text-mute">
               <th className="py-2.5 pr-4 font-normal">Date</th>
               <th className="py-2.5 pr-4 font-normal">Description</th>
               <th className="py-2.5 pr-4 font-normal">Account</th>
@@ -202,18 +202,18 @@ export default function Transactions() {
             {visible.map((t) => {
               const cat = category(t.category_id);
               return (
-                <Item as="tr" key={t.id} className="border-b border-rule transition-colors hover:bg-paper-dim/60">
-                  <td className="py-2.5 pr-4 text-sub">{formatDate(t.date)}</td>
-                  <td className="py-2.5 pr-4 font-serif text-[15px] text-ink">{t.description || "-"}</td>
-                  <td className="py-2.5 pr-4 text-sub">{accountName(t.account_id)}</td>
+                <Item as="tr" key={t.id} className="border-b border-line transition-colors hover:bg-surface/60">
+                  <td className="py-2.5 pr-4 text-mute">{formatDate(t.date)}</td>
+                  <td className="py-2.5 pr-4 font-display text-[15px] text-fg">{t.description || "-"}</td>
+                  <td className="py-2.5 pr-4 text-mute">{accountName(t.account_id)}</td>
                   <td className="py-2.5 pr-4">
                     {cat ? (
-                      <span className="inline-flex items-center gap-1.5 text-sub">
+                      <span className="inline-flex items-center gap-1.5 text-mute">
                         <span className="h-1.5 w-1.5" style={{ backgroundColor: cat.color }} />
                         {cat.name}
                       </span>
                     ) : (
-                      <span className="text-sub">-</span>
+                      <span className="text-mute">-</span>
                     )}
                   </td>
                   <td
@@ -223,7 +223,7 @@ export default function Transactions() {
                     {formatCurrency(t.amount)}
                   </td>
                   <td className="py-2.5 text-right">
-                    <button onClick={() => remove(t.id)} className="text-[10px] text-sub hover:text-neg">
+                    <button onClick={() => remove(t.id)} className="text-[10px] text-mute hover:text-neg">
                       del
                     </button>
                   </td>
