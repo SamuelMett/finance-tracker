@@ -1,4 +1,5 @@
 from datetime import date as date_type
+from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
@@ -29,7 +30,7 @@ def _check_category(db: Session, user: User, category_id: int | None):
 def list_transactions(
     account_id: int | None = None,
     category_id: int | None = None,
-    kind: str | None = None,
+    kind: Literal["income", "expense"] | None = None,
     start_date: date_type | None = Query(None),
     end_date: date_type | None = Query(None),
     user: User = Depends(get_current_user),

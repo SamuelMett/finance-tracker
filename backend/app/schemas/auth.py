@@ -1,24 +1,28 @@
-from pydantic import BaseModel, EmailStr, field_validator
+from pydantic import BaseModel, EmailStr, Field, field_validator
 
 
-class RegisterRequest(BaseModel):
+class _EmailMixin(BaseModel):
     email: EmailStr
-    password: str
 
-    @field_validator("password")
+    @field_validator("email")
     @classmethod
-    def password_len(cls, v: str):
-        if len(v) < 8:
-            raise ValueError("Password must be at least 8 characters")
-        return v
+    def lower_email(cls, v: str) -> str:
+        return v.strip().lower()
 
 
-class LoginRequest(BaseModel):
-    email: EmailStr
-    password: str
+class LoginRequest(_EmailMixin):
+    password: str = Field(min_length=1, max_length=128)
 
 
-class Login2FARequest(BaseModel):
-    email: EmailStr
-    password: str
-    otp: str
+class Login2FARequest(_EmailMixin):
+    password: str = Field(min_length=1, max_length=128)
+    otp: str = Field(pattern=r"^\d{6}$")
+
+
+class TwoFactorConfirm(BaseModel):
+    code: str = Field(pattern=r"^\d{6}$")
+
+
+class TwoFactorDisable(BaseModel):
+    password: str = Field(min_length=1, max_length=128)
+    code: str = Field(pattern=r"^\d{6}$")

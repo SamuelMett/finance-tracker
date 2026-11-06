@@ -1,37 +1,28 @@
 from datetime import date as date_type
 
-from pydantic import BaseModel, field_validator
+from typing import Literal
+
+from pydantic import BaseModel, Field
+
+
+Kind = Literal["income", "expense"]
 
 
 class TransactionCreate(BaseModel):
     account_id: int
     category_id: int | None = None
-    kind: str = "expense"
-    amount: float
-    description: str | None = None
+    kind: Kind = "expense"
+    amount: float = Field(gt=0, le=1_000_000_000)
+    description: str | None = Field(default=None, max_length=200)
     date: date_type
-
-    @field_validator("amount")
-    @classmethod
-    def amount_positive(cls, v: float):
-        if v <= 0:
-            raise ValueError("Amount must be greater than 0")
-        return v
-
-    @field_validator("kind")
-    @classmethod
-    def kind_valid(cls, v: str):
-        if v not in ("income", "expense"):
-            raise ValueError("kind must be 'income' or 'expense'")
-        return v
 
 
 class TransactionUpdate(BaseModel):
     account_id: int | None = None
     category_id: int | None = None
-    kind: str | None = None
-    amount: float | None = None
-    description: str | None = None
+    kind: Kind | None = None
+    amount: float | None = Field(default=None, gt=0, le=1_000_000_000)
+    description: str | None = Field(default=None, max_length=200)
     date: date_type | None = None
 
 
