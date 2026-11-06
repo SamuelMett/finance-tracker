@@ -59,7 +59,7 @@ export function PageHeader({ title, subtitle, children }) {
     <div className="relative flex flex-wrap items-end justify-between gap-4 pb-3">
       <div>
         <motion.h1
-          className="font-serif text-2xl"
+          className="font-display text-2xl font-medium tracking-[-0.02em]"
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: EASE }}
@@ -68,7 +68,7 @@ export function PageHeader({ title, subtitle, children }) {
         </motion.h1>
         {subtitle && (
           <motion.p
-            className="mt-1 font-mono text-xs text-sub"
+            className="mt-1 font-mono text-xs text-mute"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.12 }}
@@ -80,7 +80,7 @@ export function PageHeader({ title, subtitle, children }) {
       {children}
       <motion.span
         aria-hidden
-        className="absolute inset-x-0 bottom-0 h-px origin-left bg-ink"
+        className="absolute inset-x-0 bottom-0 h-px origin-left bg-line-hi"
         initial={{ scaleX: 0 }}
         animate={{ scaleX: 1 }}
         transition={{ duration: 0.8, ease: INK_EASE }}

@@ -146,8 +146,8 @@ export default function Subscriptions() {
         </StatRow>
       )}
 
-      <form onSubmit={onSubmit} className="border border-rule p-4">
-        <div className="mb-3 font-mono text-[10.5px] uppercase tracking-[0.1em] text-sub">Add manually</div>
+      <form onSubmit={onSubmit} className="border border-line p-4">
+        <div className="mb-3 font-mono text-[10.5px] uppercase tracking-[0.1em] text-mute">Add manually</div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-5">
           <input
             className={`${inputClass} sm:col-span-2`}
@@ -178,7 +178,7 @@ export default function Subscriptions() {
       </form>
 
       {loading ? (
-        <div className="font-mono text-xs text-sub">Loading...</div>
+        <div className="font-mono text-xs text-mute">Loading...</div>
       ) : active.length === 0 && cancelled.length === 0 ? (
         <EmptyState
           icon={Repeat}
@@ -202,8 +202,8 @@ export default function Subscriptions() {
               amount={`${formatCurrency(item.amount)} (${formatCurrency(monthlyEquivalent(item))}/mo)`}
               tone="down"
               right={
-                <div className="flex gap-3 font-mono text-[10px] text-sub">
-                  <button onClick={() => setStatus(item.id, "cancelled")} className="hover:text-ink">
+                <div className="flex gap-3 font-mono text-[10px] text-mute">
+                  <button onClick={() => setStatus(item.id, "cancelled")} className="hover:text-fg">
                     cancel
                   </button>
                   <button onClick={() => remove(item.id)} className="hover:text-neg">
@@ -216,15 +216,15 @@ export default function Subscriptions() {
 
           {cancelled.length > 0 && (
             <Reveal className="mt-6">
-              <div className="mb-2 font-mono text-[10.5px] uppercase tracking-[0.08em] text-sub">Cancelled</div>
+              <div className="mb-2 font-mono text-[10.5px] uppercase tracking-[0.08em] text-mute">Cancelled</div>
               {cancelled.map((item) => (
                 <LedgerRow
                   key={item.id}
-                  name={<span className="text-sub line-through">{item.name}</span>}
+                  name={<span className="text-mute line-through">{item.name}</span>}
                   amount={formatCurrency(item.amount)}
                   right={
-                    <div className="flex gap-3 font-mono text-[10px] text-sub">
-                      <button onClick={() => setStatus(item.id, "active")} className="hover:text-ink">
+                    <div className="flex gap-3 font-mono text-[10px] text-mute">
+                      <button onClick={() => setStatus(item.id, "active")} className="hover:text-fg">
                         reactivate
                       </button>
                       <button onClick={() => remove(item.id)} className="hover:text-neg">

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { api } from "../api/client";
-import { Button } from "../components/ui";
+import { Button, inputClass } from "../components/ui";
 import { PageHeader, Notice } from "../components/motion";
 
 export default function Settings() {
@@ -11,6 +11,9 @@ export default function Settings() {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [disabling, setDisabling] = useState(false);
+  const [password, setPassword] = useState("");
+  const [offCode, setOffCode] = useState("");
 
   async function loadMe() {
     try {
@@ -57,16 +60,21 @@ export default function Settings() {
     }
   }
 
-  async function disable2fa() {
+  async function disable2fa(e) {
+    e.preventDefault();
     setError("");
     setMessage("");
     setLoading(true);
     try {
-      await api.post("/auth/2fa/disable");
+      await api.post("/auth/2fa/disable", { password, code: offCode });
       setMessage("Two-factor authentication disabled.");
+      setDisabling(false);
+      setPassword("");
+      setOffCode("");
       loadMe();
     } catch (err) {
-      setError(err?.response?.data?.detail || "Could not disable 2FA.");
+      const d = err?.response?.data?.detail;
+      setError(typeof d === "string" ? d : "Could not disable 2FA. Check your password and code.");
     } finally {
       setLoading(false);
     }
@@ -78,16 +86,16 @@ export default function Settings() {
         title="Settings"
         subtitle={
           <>
-            Signed in as <span className="text-ink">{me?.email}</span>
+            Signed in as <span className="text-fg">{me?.email}</span>
           </>
         }
       />
 
       <div>
-        <div className="flex items-center justify-between gap-4 border-b border-rule pb-4">
+        <div className="flex items-center justify-between gap-4 border-b border-line pb-4">
           <div>
-            <div className="font-serif text-lg">Two-factor authentication</div>
-            <div className="mt-1 font-mono text-xs text-sub">
+            <div className="font-display text-lg">Two-factor authentication</div>
+            <div className="mt-1 font-mono text-xs text-mute">
               {me?.twofa_enabled
                 ? "Enabled: a code from your authenticator app is required at login."
                 : "Disabled: turn it on to add an extra layer of security to your account."}
@@ -95,8 +103,8 @@ export default function Settings() {
           </div>
 
           {me?.twofa_enabled ? (
-            <Button variant="danger" onClick={disable2fa} disabled={loading}>
-              Disable
+            <Button variant="danger" onClick={() => setDisabling((v) => !v)} disabled={loading}>
+              {disabling ? "Cancel" : "Disable"}
             </Button>
           ) : (
             !setup && (
@@ -114,9 +122,37 @@ export default function Settings() {
           </Notice>
         )}
 
+        {disabling && (
+          <form onSubmit={disable2fa} className="mt-5 space-y-3 rounded-md border border-line bg-surface p-4">
+            <p className="font-mono text-xs text-mute">
+              To switch 2FA off, confirm it is you: enter your password and a current code from your authenticator.
+            </p>
+            <input
+              type="password"
+              autoComplete="current-password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className={`${inputClass} w-full`}
+              required
+            />
+            <input
+              inputMode="numeric"
+              placeholder="000000"
+              value={offCode}
+              onChange={(e) => setOffCode(e.target.value.replace(/D/g, "").slice(0, 6))}
+              className={`${inputClass} w-full text-center tracking-[0.4em]`}
+              required
+            />
+            <Button variant="danger" disabled={loading || offCode.length !== 6 || !password}>
+              Turn off 2FA
+            </Button>
+          </form>
+        )}
+
         {setup && (
           <div className="mt-5 space-y-4 pt-1">
-            <p className="font-mono text-xs text-sub">
+            <p className="font-mono text-xs text-mute">
               Scan this QR code with your authenticator app (Google Authenticator, Authy, 1Password, etc.), then enter
               the 6-digit code it generates.
             </p>
@@ -126,7 +162,7 @@ export default function Settings() {
               transition={{ duration: 0.45 }}
               src={`data:image/png;base64,${setup.qr_png_base64}`}
               alt="2FA QR code"
-              className="mx-auto h-44 w-44 border border-rule bg-white p-2"
+              className="mx-auto h-44 w-44 rounded border border-line-hi bg-white p-2"
             />
             <form onSubmit={confirmSetup} className="flex gap-3">
               <input
@@ -134,7 +170,7 @@ export default function Settings() {
                 onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
                 inputMode="numeric"
                 placeholder="000000"
-                className="flex-1 border-0 border-b border-rule bg-transparent py-2 text-center font-mono text-lg tracking-[0.4em] text-ink outline-none focus:border-ink"
+                className={`${inputClass} flex-1 text-center text-lg tracking-[0.4em]`}
               />
               <Button disabled={loading || code.length !== 6}>Confirm</Button>
             </form>

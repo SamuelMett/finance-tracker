@@ -12,7 +12,7 @@ export default function PublicShell() {
   }, [pathname]);
 
   return (
-    <div className="min-h-screen bg-paper text-ink">
+    <div className="min-h-screen bg-bg text-fg">
       <PublicNav />
       <motion.div key={pathname} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.35 }}>
         <Outlet />

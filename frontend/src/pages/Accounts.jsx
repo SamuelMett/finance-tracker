@@ -73,7 +73,7 @@ export default function Accounts() {
 
       {error && <Notice>{error}</Notice>}
 
-      <form onSubmit={onSubmit} className="border border-rule p-4">
+      <form onSubmit={onSubmit} className="border border-line p-4">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
           <input
             className={`${inputClass} sm:col-span-2`}
@@ -102,7 +102,7 @@ export default function Accounts() {
       </form>
 
       {loading ? (
-        <div className="font-mono text-xs text-sub">Loading...</div>
+        <div className="font-mono text-xs text-mute">Loading...</div>
       ) : accounts.length === 0 ? (
         <EmptyState title="No accounts yet" subtitle="Add one above." />
       ) : (

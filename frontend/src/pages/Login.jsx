@@ -58,12 +58,12 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-paper px-4 text-ink">
+    <div className="min-h-screen w-full bg-bg px-4 text-fg">
       <Stagger gap={0.07} className="mx-auto flex min-h-screen w-full max-w-sm flex-col justify-center py-10">
         <Item>
           <Link
             to="/"
-            className="mb-8 inline-flex w-fit items-center gap-1.5 font-mono text-xs uppercase tracking-[0.08em] text-sub hover:text-ink"
+            className="mb-8 inline-flex w-fit items-center gap-1.5 font-mono text-xs uppercase tracking-[0.08em] text-mute hover:text-fg"
           >
             <ArrowLeft size={14} />
             Back to home
@@ -73,16 +73,16 @@ export default function Login() {
         <Item>
           <Link to="/" className="mb-1 inline-flex items-center gap-2">
             <RunwayMark size={24} />
-            <span className="font-serif text-2xl">Runway</span>
+            <span className="font-display text-2xl">Runway</span>
           </Link>
         </Item>
-        <Item className="mb-8 font-mono text-xs text-sub">Sign in to manage your money.</Item>
+        <Item className="mb-8 font-mono text-xs text-mute">Sign in to manage your money.</Item>
 
         {error && <Notice className="mb-5">{error}</Notice>}
 
         <Item as="form" onSubmit={onSubmit} className="space-y-6">
           <div>
-            <label className="font-mono text-[10.5px] uppercase tracking-[0.08em] text-sub">Email</label>
+            <label className="font-mono text-[10.5px] uppercase tracking-[0.08em] text-mute">Email</label>
             <input
               className={`${inputClass} mt-1 w-full`}
               value={email}
@@ -96,7 +96,7 @@ export default function Login() {
           </div>
 
           <div>
-            <label className="font-mono text-[10.5px] uppercase tracking-[0.08em] text-sub">Password</label>
+            <label className="font-mono text-[10.5px] uppercase tracking-[0.08em] text-mute">Password</label>
             <input
               className={`${inputClass} mt-1 w-full`}
               value={password}
@@ -111,15 +111,15 @@ export default function Login() {
 
           <button
             disabled={loading}
-            className="w-full border border-ink bg-ink py-2.5 font-mono text-xs uppercase tracking-[0.08em] text-paper transition hover:bg-transparent hover:text-ink disabled:opacity-50"
+            className="w-full rounded border border-navy-hi/60 bg-navy py-2.5 font-mono text-xs uppercase tracking-[0.08em] text-fg transition active:scale-[0.98] hover:border-navy-hi hover:bg-navy-hi disabled:opacity-50"
           >
             {loading ? "Signing in..." : "Sign in"}
           </button>
         </Item>
 
-        <Item as="p" className="mt-6 font-mono text-xs text-sub">
+        <Item as="p" className="mt-6 font-mono text-xs text-mute">
           No account?{" "}
-          <Link className="text-ink underline hover:no-underline" to="/register">
+          <Link className="text-fg underline hover:no-underline" to="/register">
             Register
           </Link>
         </Item>

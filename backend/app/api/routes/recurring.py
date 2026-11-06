@@ -2,11 +2,14 @@ import re
 import statistics
 from collections import Counter, defaultdict
 from datetime import timedelta
+from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.api.deps.auth import get_current_user, get_db
+from app.models.account import Account
+from app.models.category import Category
 from app.models.recurring import RecurringSeries
 from app.models.transaction import Transaction
 from app.models.user import User
@@ -35,9 +38,16 @@ def _classify_frequency(median_interval: float) -> str | None:
     return None
 
 
+def _check_refs(db: Session, user: User, account_id: int | None, category_id: int | None) -> None:
+    if account_id is not None and not db.query(Account).filter(Account.id == account_id, Account.user_id == user.id).first():
+        raise HTTPException(status_code=400, detail="Invalid account")
+    if category_id is not None and not db.query(Category).filter(Category.id == category_id, Category.user_id == user.id).first():
+        raise HTTPException(status_code=400, detail="Invalid category")
+
+
 @router.get("", response_model=list[RecurringOut])
 def list_recurring(
-    kind: str | None = None,
+    kind: Literal["income", "expense"] | None = None,
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
@@ -51,6 +61,7 @@ def list_recurring(
 def create_recurring(
     payload: RecurringCreate, user: User = Depends(get_current_user), db: Session = Depends(get_db)
 ):
+    _check_refs(db, user, payload.account_id, payload.category_id)
     series = RecurringSeries(user_id=user.id, source="manual", **payload.model_dump())
     db.add(series)
     db.commit()
@@ -77,7 +88,9 @@ def update_recurring(
     db: Session = Depends(get_db),
 ):
     series = _get_owned_series(db, user, series_id)
-    for field, value in payload.model_dump(exclude_unset=True).items():
+    data = payload.model_dump(exclude_unset=True)
+    _check_refs(db, user, data.get("account_id"), data.get("category_id"))
+    for field, value in data.items():
         setattr(series, field, value)
     db.commit()
     db.refresh(series)

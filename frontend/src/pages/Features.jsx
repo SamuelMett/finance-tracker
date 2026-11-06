@@ -60,10 +60,10 @@ export default function Features() {
   return (
     <>
       <Stagger as="section" gap={0.12} className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 sm:py-20">
-        <Item as="h1" className="font-serif text-4xl">
+        <Item as="h1" className="font-display text-4xl">
           Everything Runway does
         </Item>
-        <Item as="p" className="mt-4 font-mono text-xs text-sub">
+        <Item as="p" className="mt-4 font-mono text-xs text-mute">
           A focused set of tools for understanding your money, not a hundred features you'll never open.
         </Item>
       </Stagger>
@@ -73,17 +73,17 @@ export default function Features() {
           <Reveal key={s.title}>
             <Card className="sm:p-7">
               <div className="flex items-start gap-5">
-                <span className="mt-1 font-mono text-xs text-sub">{String(i + 1).padStart(2, "0")}</span>
+                <span className="mt-1 font-mono text-xs text-mute">{String(i + 1).padStart(2, "0")}</span>
                 <div className="flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <s.icon size={18} strokeWidth={1.75} className="text-ink" />
-                    <h2 className="font-serif text-xl">{s.title}</h2>
+                    <s.icon size={18} strokeWidth={1.75} className="text-fg" />
+                    <h2 className="font-display text-xl">{s.title}</h2>
                   </div>
-                  <p className="mt-2 text-sm leading-relaxed text-sub">{s.desc}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-mute">{s.desc}</p>
                   <ul className="mt-4 space-y-1.5">
                     {s.points.map((point) => (
-                      <li key={point} className="flex gap-2 text-sm text-sub">
-                        <span className="mt-2 h-1 w-1 shrink-0 bg-ink" />
+                      <li key={point} className="flex gap-2 text-sm text-mute">
+                        <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent" />
                         {point}
                       </li>
                     ))}
@@ -96,8 +96,8 @@ export default function Features() {
       </section>
 
       <Reveal as="section" className="mx-auto max-w-3xl px-4 pb-24 text-center sm:px-6">
-        <h2 className="font-serif text-2xl">Ready to try it?</h2>
-        <p className="mt-2 font-mono text-xs text-sub">Setting up your first account takes about two minutes.</p>
+        <h2 className="font-display text-2xl">Ready to try it?</h2>
+        <p className="mt-2 font-mono text-xs text-mute">Setting up your first account takes about two minutes.</p>
         <Link to="/register" className="mt-6 inline-block">
           <Button className="!px-6 !py-3 text-sm">
             Get started free <ArrowRight size={16} />

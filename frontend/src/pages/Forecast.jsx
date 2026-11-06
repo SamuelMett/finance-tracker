@@ -39,13 +39,13 @@ export default function Forecast() {
             <button
               key={r}
               onClick={() => setDays(r)}
-              className={`relative pb-1 transition-colors ${days === r ? "text-ink" : "text-sub hover:text-ink"}`}
+              className={`relative pb-1 transition-colors ${days === r ? "text-fg" : "text-mute hover:text-fg"}`}
             >
               {r}D
               {days === r && (
                 <motion.span
                   layoutId="range-underline"
-                  className="absolute inset-x-0 bottom-0 h-px bg-ink"
+                  className="absolute inset-x-0 bottom-0 h-px bg-accent"
                   transition={{ type: "spring", stiffness: 520, damping: 40 }}
                 />
               )}
@@ -57,7 +57,7 @@ export default function Forecast() {
       {error && <Notice>{error}</Notice>}
 
       {!data && loading ? (
-        <div className="font-mono text-xs text-sub">Loading...</div>
+        <div className="font-mono text-xs text-mute">Loading...</div>
       ) : (
         data && (
           <>
@@ -89,40 +89,46 @@ export default function Forecast() {
               />
             </StatRow>
 
-            <Reveal className="h-72 border border-rule p-4">
+            <Reveal className="h-72 rounded-md border border-line bg-surface p-4">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                   <defs>
                     <linearGradient id="balanceFill" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#181510" stopOpacity={0.18} />
-                      <stop offset="100%" stopColor="#181510" stopOpacity={0} />
+                      <stop offset="0%" stopColor="#f0a561" stopOpacity={0.26} />
+                      <stop offset="100%" stopColor="#f0a561" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="2 3" stroke="#d9d3c4" vertical={false} />
+                  <CartesianGrid stroke="#1b1d22" vertical={false} />
                   <XAxis
                     dataKey="label"
-                    tick={{ fill: "#8a8175", fontSize: 10, fontFamily: "IBM Plex Mono" }}
+                    tick={{ fill: "#5a5f69", fontSize: 10, fontFamily: "Geist Mono" }}
                     interval={Math.floor(days / 6)}
-                    axisLine={{ stroke: "#d9d3c4" }}
+                    axisLine={false}
                     tickLine={false}
                   />
                   <YAxis
-                    tick={{ fill: "#8a8175", fontSize: 10, fontFamily: "IBM Plex Mono" }}
+                    tick={{ fill: "#5a5f69", fontSize: 10, fontFamily: "Geist Mono" }}
                     tickFormatter={(v) => formatCurrency(v)}
                     axisLine={false}
                     tickLine={false}
                     width={80}
                   />
                   <Tooltip
-                    contentStyle={{ background: "#fbfaf6", border: "1px solid #181510", borderRadius: 0 }}
-                    labelStyle={{ color: "#181510", fontFamily: "IBM Plex Mono" }}
+                    contentStyle={{
+                      background: "#111215",
+                      border: "1px solid #383c45",
+                      borderRadius: 4,
+                      fontFamily: "Geist Mono",
+                      fontSize: 12,
+                    }}
+                    labelStyle={{ color: "#8c919a" }}
                     formatter={(value) => [formatCurrency(value), "Balance"]}
                   />
-                  <ReferenceLine y={0} stroke="#8a3324" strokeDasharray="4 4" />
+                  <ReferenceLine y={0} stroke="#ee7b70" strokeDasharray="4 4" />
                   <Area
                     type="monotone"
                     dataKey="balance"
-                    stroke="#181510"
+                    stroke="#f0a561"
                     strokeWidth={1.75}
                     fill="url(#balanceFill)"
                     animationDuration={1300}
@@ -133,7 +139,7 @@ export default function Forecast() {
             </Reveal>
 
             <div>
-              <div className="mb-3 font-mono text-[10.5px] uppercase tracking-[0.1em] text-sub">Upcoming activity</div>
+              <div className="mb-3 font-mono text-[10.5px] uppercase tracking-[0.1em] text-mute">Upcoming activity</div>
               {eventDays.length === 0 ? (
                 <EmptyState
                   icon={Calendar}

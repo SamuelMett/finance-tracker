@@ -46,25 +46,25 @@ export default function TwoFactorLogin() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-paper px-4 text-ink">
+    <div className="min-h-screen w-full bg-bg px-4 text-fg">
       <Stagger gap={0.07} className="mx-auto flex min-h-screen w-full max-w-sm flex-col justify-center py-10">
         <Item>
           <Link
             to="/login"
-            className="mb-8 inline-flex w-fit items-center gap-1.5 font-mono text-xs uppercase tracking-[0.08em] text-sub hover:text-ink"
+            className="mb-8 inline-flex w-fit items-center gap-1.5 font-mono text-xs uppercase tracking-[0.08em] text-mute hover:text-fg"
           >
             <ArrowLeft size={14} />
             Back to login
           </Link>
         </Item>
 
-        <Item as="h1" className="font-serif text-2xl">
+        <Item as="h1" className="font-display text-2xl">
           Two-factor code
         </Item>
-        <Item as="p" className="mt-1 font-mono text-xs text-sub">
+        <Item as="p" className="mt-1 font-mono text-xs text-mute">
           Enter the 6-digit code from your authenticator app.
         </Item>
-        <Item as="p" className="mt-3 font-mono text-[11px] text-sub">
+        <Item as="p" className="mt-3 font-mono text-[11px] text-mute">
           Account: {email}
         </Item>
 
@@ -77,12 +77,12 @@ export default function TwoFactorLogin() {
             inputMode="numeric"
             placeholder="000000"
             autoFocus
-            className="w-full border-0 border-b border-rule bg-transparent py-2 text-center font-mono text-xl tracking-[0.5em] text-ink outline-none focus:border-ink"
+            className="w-full rounded border border-line bg-bg py-3 text-center font-mono text-2xl tracking-[0.5em] text-fg outline-none transition-colors placeholder:text-faint hover:border-line-hi focus:border-accent"
           />
 
           <button
             disabled={loading || otp.length !== 6}
-            className="w-full border border-ink bg-ink py-2.5 font-mono text-xs uppercase tracking-[0.08em] text-paper transition hover:bg-transparent hover:text-ink disabled:opacity-50"
+            className="w-full rounded border border-navy-hi/60 bg-navy py-2.5 font-mono text-xs uppercase tracking-[0.08em] text-fg transition active:scale-[0.98] hover:border-navy-hi hover:bg-navy-hi disabled:opacity-50"
           >
             {loading ? "Verifying..." : "Verify and continue"}
           </button>

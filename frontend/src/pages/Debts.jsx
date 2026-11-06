@@ -129,8 +129,8 @@ export default function Debts() {
         </StatRow>
       )}
 
-      <form onSubmit={onSubmit} className="border border-rule p-4">
-        <div className="mb-3 font-mono text-[10.5px] uppercase tracking-[0.1em] text-sub">Add a debt</div>
+      <form onSubmit={onSubmit} className="border border-line p-4">
+        <div className="mb-3 font-mono text-[10.5px] uppercase tracking-[0.1em] text-mute">Add a debt</div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 lg:grid-cols-6">
           <input
             className={`${inputClass} sm:col-span-2`}
@@ -185,7 +185,7 @@ export default function Debts() {
       </form>
 
       {loading ? (
-        <div className="font-mono text-xs text-sub">Loading...</div>
+        <div className="font-mono text-xs text-mute">Loading...</div>
       ) : debts.length === 0 ? (
         <EmptyState
           title="No debts tracked yet"
@@ -207,8 +207,8 @@ export default function Debts() {
           </Stagger>
 
           <Reveal>
-            <div className="mb-4 flex flex-wrap items-center justify-between gap-4 border-b border-ink pb-3">
-              <h2 className="font-serif text-xl">Payoff plan</h2>
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-4 border-b border-line-hi pb-3">
+              <h2 className="font-display text-xl">Payoff plan</h2>
               <div className="flex flex-wrap items-center gap-5">
                 <select
                   className={selectClass}
@@ -255,17 +255,17 @@ export default function Debts() {
                   <StatCard label="Total paid" amount={plan.total_paid} fmt={formatCurrency} />
                 </StatRow>
 
-                <div className="mb-3 font-mono text-[10.5px] uppercase tracking-[0.1em] text-sub">Payoff order</div>
+                <div className="mb-3 font-mono text-[10.5px] uppercase tracking-[0.1em] text-mute">Payoff order</div>
                 <Stagger key={`${strategy}-${plan.months_to_debt_free}`} count={plan.payoff_order.length}>
                   {plan.payoff_order.map((p, i) => (
                     <Item
                       key={p.debt_id}
-                      className="flex items-baseline gap-3 border-b border-rule py-2.5 last:border-b-0"
+                      className="flex items-baseline gap-3 border-b border-line py-2.5 last:border-b-0"
                     >
-                      <span className="font-mono text-[11px] text-sub">{String(i + 1).padStart(2, "0")}</span>
-                      <span className="font-serif text-[15px]">{p.name}</span>
-                      <span className="relative top-[-4px] flex-1 border-b border-dotted border-rule" />
-                      <span className="whitespace-nowrap font-mono text-xs text-sub">
+                      <span className="font-mono text-[11px] text-mute">{String(i + 1).padStart(2, "0")}</span>
+                      <span className="font-display text-[15px]">{p.name}</span>
+                      <span className="relative top-[-4px] flex-1 border-b border-dotted border-line" />
+                      <span className="whitespace-nowrap font-mono text-xs text-mute">
                         month {p.payoff_month} &middot; {formatCurrency(p.interest_paid)} interest
                       </span>
                     </Item>
